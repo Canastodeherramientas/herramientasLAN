@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramienta 5 · Planificando nuestra recolección</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--paper:#f7f3ea;--ink:#28352d;--muted:#66706a;--green:#2e5e2a;--green2:#7a8f3a;--orange:#d95f18;--purple:#76508b;--blue:#17718f;--brown:#a86b2d;--line:#ded7c8;--white:#fffdf8}
+*{box-sizing:border-box} body{margin:0;background:#e9e4d9;color:var(--ink);font-family:'Titillium Web',sans-serif;font-size:16px}
+button,select{font-family:inherit}.toolbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 auto 14px;max-width:1085px}.toolbar button{border:1px solid #d8d2c5;border-radius:8px;min-width:auto;padding:8px 15px;background:#fbfaf5;color:#35554a;font-family:'Titillium Web',sans-serif;font-weight:600;font-size:14px;letter-spacing:.1px;cursor:pointer;box-shadow:0 1px 4px rgba(25,55,45,.07);transition:background .2s,border-color .2s,color .2s,box-shadow .2s}.toolbar button:hover{background:#f2eee5;border-color:#bcb5a7;box-shadow:0 3px 8px rgba(25,55,45,.10)}.toolbar button:disabled{opacity:.65;cursor:wait}.tb-pdf{color:#176b4b;border-color:#b9d0c2}.tb-export,.tb-import{color:#4f675d;border-color:#c9c2b5}.tb-excel{color:#4f7f3a;border-color:#b8c9aa}.tb-clear{color:#a6533d;border-color:#d8b3a8}.project-file{display:none}
+.hint{max-width:1180px;margin:14px auto 0;padding:0 20px;color:#657069;font-size:14px;text-align:center}
+.sheet{width:min(1180px,calc(100% - 30px));margin:14px auto 35px;background:var(--white);border:1px solid #ddd4c3;border-radius:22px;box-shadow:0 12px 35px #443c2d16;overflow:hidden}
+.hero{padding:35px 42px 29px;background:linear-gradient(135deg,#f5f1e6 0%,#fffdf8 62%,#edf2e8 100%);border-bottom:1px solid var(--line);position:relative}.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--green);font-weight:800;letter-spacing:1.5px;font-size:13px;text-transform:uppercase}.eyebrow:before{content:'';width:28px;height:3px;background:var(--orange);border-radius:3px}.hero h1{margin:8px 0 8px;font-size:34px;line-height:1.05;color:var(--green);font-weight:800;max-width:790px;text-transform:uppercase}.hero p{margin:0;max-width:720px;color:#59645e;font-size:17px;line-height:1.4}.hero-note{margin-top:20px;display:inline-block;padding:8px 13px;border-radius:999px;background:#e8eee3;color:#486043;font-size:14px;font-weight:600}
+.section{padding:27px 30px 30px}.section + .section{border-top:1px solid var(--line);background:#fbf8f0}.section-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px}.step{width:46px;height:46px;flex:0 0 46px;border-radius:14px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:21px;font-weight:800}.section:nth-of-type(3) .step{background:var(--purple)}.section-head h2{margin:0;font-size:25px;line-height:1.05;color:var(--green);font-weight:800;text-transform:uppercase}.section:nth-of-type(3) .section-head h2{color:var(--purple)}.section-head p{margin:5px 0 0;color:var(--muted);font-size:15px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:15px;background:#fff;box-shadow:0 4px 15px #4b443716}.data-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;min-width:920px}.data-table th{padding:11px 9px;color:#fff;text-align:left;font-size:13px;line-height:1.15;font-weight:700;border-right:1px solid #ffffff40;vertical-align:bottom}.data-table th:last-child{border-right:0}.data-table th:nth-child(1){background:var(--green);width:17%}.data-table th:nth-child(2){background:var(--orange);width:14%}.data-table th:nth-child(3){background:var(--purple);width:14%}.data-table th:nth-child(4){background:var(--blue);width:17%}.data-table th:nth-child(5){background:var(--brown);width:13%}.data-table th:nth-child(6){background:var(--green);width:10%}.data-table th:nth-child(7){background:var(--green2);width:15%}.follow .data-table th:nth-child(1){width:18%;background:var(--green)}.follow .data-table th:nth-child(2){width:18%;background:var(--orange)}.follow .data-table th:nth-child(3){width:16%;background:var(--purple)}.follow .data-table th:nth-child(4){width:15%;background:var(--blue)}.follow .data-table th:nth-child(5){width:18%;background:var(--brown)}.follow .data-table th:nth-child(6){width:15%;background:var(--green2)}
+.data-table td{height:62px;padding:8px;border-right:1px solid #e7e1d5;border-bottom:1px solid #e7e1d5;vertical-align:top;background:#fffdf9;outline:none;white-space:pre-wrap;overflow-wrap:anywhere}.data-table tbody tr:nth-child(even) td{background:#faf7f0}.data-table td:last-child{border-right:0}.data-table tr:last-child td{border-bottom:0}.data-table td[contenteditable="true"]{cursor:text}.linked-org{background:#f1f5ee!important;color:var(--green);font-weight:700;vertical-align:middle}.data-table td[contenteditable="true"]:focus{box-shadow:inset 0 0 0 2px #b8c8ae;background:#fff}.data-table td[contenteditable="true"]:empty:before{content:'Escribe aquí…';color:#b1ada3;font-size:13px}.follow .data-table td[contenteditable="true"]:empty:before{content:'Escribe aquí…'}
+.status-select{width:100%;height:39px;border:0;border-radius:9px;text-align:center;font-weight:800;font-size:13px;cursor:pointer;background:#eee9de;color:#4c534e}.status-select[data-v="P"]{background:#e2ecd4;color:#466329}.status-select[data-v="E"]{background:#dcecf1;color:#126179}.status-select[data-v="C"]{background:#eadff0;color:#68447a}.status-select[data-v="R"]{background:#f8dfd1;color:#a8460e}.status-select option{background:#fff;color:#333}
+#planningTable th:nth-child(6),#planningTable td:nth-child(6){min-width:150px;width:150px}
+#planningTable .status-select{min-width:138px;height:44px;font-size:14px;padding:0 10px}
+.status-legend{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}.legend-label{font-weight:700;color:#58635c;margin-right:3px}.pill{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;font-size:13px;font-weight:700}.pill b{font-weight:800}.p{background:#e2ecd4;color:#466329}.e{background:#dcecf1;color:#126179}.c{background:#eadff0;color:#68447a}.r{background:#f8dfd1;color:#a8460e}
+.process{margin-top:19px;padding:15px 17px;border:1px solid #d9e1d5;background:#f1f5ee;border-radius:13px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.process strong{color:var(--green);font-size:14px;text-transform:uppercase;letter-spacing:.4px}.process .arrow{color:#9a9f98;font-weight:800}.process span:not(.arrow){background:#fff;border:1px solid #dce2d8;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;color:#556059}
+.footer-message{margin:0 30px 30px;padding:18px 20px;border-radius:14px;background:#f1ede3;color:#59635d;text-align:center;font-size:16px;font-weight:600}
+@media(max-width:700px){.toolbar{position:static}.sheet{width:calc(100% - 16px);border-radius:16px}.hero{padding:28px 22px}.hero h1{font-size:27px}.hero p{font-size:16px}.section{padding:23px 16px}.section-head h2{font-size:22px}.section-head{gap:12px}.step{width:40px;height:40px;flex-basis:40px}.footer-message{margin:0 16px 20px}.hint{font-size:13px}.data-table{min-width:920px}}
+@media print{body{background:#fff}.toolbar,.hint{display:none}.sheet{width:100%;margin:0;box-shadow:none;border:0}.hero{break-inside:avoid}.section{break-inside:avoid}.footer-message{break-inside:avoid}}
+
+.add-row{margin:12px 0 0;border:1px solid var(--green);background:#f5f8ef;color:var(--green);border-radius:10px;padding:8px 15px;font-size:15px;font-weight:600;cursor:pointer;transition:.2s}.add-row:hover{background:#e9f0df;transform:translateY(-1px)}
+.report-section{margin:0 30px 28px;padding:24px;border:1px solid var(--line);border-radius:18px;background:#fbf8f0;box-shadow:0 4px 15px #4b443710}.report-head{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:20px}.report-kicker{font-size:12px;letter-spacing:1.5px;color:var(--orange);font-weight:800}.report-head h2{margin:2px 0 2px;font-size:25px}.report-head p{margin:0;color:var(--muted)}.report-actions{display:flex;gap:8px;flex-wrap:wrap}.report-download,.report-excel{border:0;border-radius:11px;color:#fff;padding:11px 17px;font:600 15px 'Titillium Web',sans-serif;cursor:pointer}.report-excel{background:#4f7f3a}.report-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}.metric{background:#fffdf8;border:1px solid var(--line);border-radius:12px;padding:12px 14px}.metric b{display:block;font-size:24px;line-height:1;color:var(--green)}.metric span{font-size:13px;color:var(--muted)}.report-table-wrap{overflow-x:auto}.report-table{width:100%;border-collapse:collapse;background:#fffdf9}.report-table th,.report-table td{padding:9px 10px;border-bottom:1px solid #e7e1d5;text-align:left;font-size:14px}.report-table th{background:#eef2e6;color:var(--green)}.report-empty{text-align:center;color:var(--muted);padding:18px!important}.report-status{font-weight:700}.report-status.p{color:#6b7e24}.report-status.e{color:#b26b1b}.report-status.c{color:#27734b}.report-status.r{color:#8b4c7d}
+@media(max-width:700px){.report-section{margin:0 16px 22px;padding:18px}.report-head{flex-direction:column;align-items:flex-start}.report-actions{width:100%}.report-download,.report-excel{flex:1}.report-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<style id="pastel-table-header-final">
+/* Encabezados de tablas: misma familia cromática de los estados, con tonos propios */
+#planningTable thead th,
+#followTable thead th{
+  color:#ffffff !important;
+  font-weight:800 !important;
+  text-shadow:0 1px 1px rgba(40,53,45,.12) !important;
+}
+#planningTable thead th:nth-child(1),
+#followTable thead th:nth-child(1){background:#9db58a !important;}
+#planningTable thead th:nth-child(2),
+#followTable thead th:nth-child(2){background:#8fb8c4 !important;}
+#planningTable thead th:nth-child(3),
+#followTable thead th:nth-child(3){background:#a995b8 !important;}
+#planningTable thead th:nth-child(4),
+#followTable thead th:nth-child(4){background:#86b4c0 !important;}
+#planningTable thead th:nth-child(5),
+#followTable thead th:nth-child(5){background:#d0a98f !important;}
+#planningTable thead th:nth-child(6),
+#followTable thead th:nth-child(6){background:#a391b0 !important;}
+#planningTable thead th:nth-child(7){background:#aebc82 !important;}
+</style>
+
+</head>
+<body>
+<div class="toolbar">
+<button class="tb-pdf" onclick="exportPDFDesdeBoton(this)">PDF</button>
+<button class="tb-export" onclick="exportProject()">Exportar proyecto</button>
+<button class="tb-import" onclick="document.getElementById('projectFile').click()">Importar proyecto</button>
+<button class="tb-excel" onclick="exportExcel()">Excel</button>
+<button class="tb-clear" onclick="limpiar('sheet4')">Limpiar</button>
+<input class="project-file" id="projectFile" type="file" accept=".json,application/json" onchange="importProject(event)">
+</div>
+<div class="sheet" id="sheet4">
+<header class="hero">
+<div class="eyebrow">Herramienta 5 · Ruta de Mapeo Organizativo</div>
+<h1>Planificando y monitoreando nuestra recolección de información</h1>
+<p>Organizamos las actividades para la recolección de información con las organizaciones y comunidades.</p>
+<div class="hero-note">Organicemos el camino de la recolección</div>
+</header>
+<section class="section">
+<div class="section-head"><div class="step">01</div><div><h2>Planifiquemos la recolección</h2><p>Definamos con quién, cómo y cuándo recogeremos la información.</p></div></div>
+<div class="table-wrap"><table class="data-table" id="planningTable"><thead><tr><th>Organización o comunidad</th><th>Persona responsable</th><th>Modalidad<br>Virtual / Presencial</th><th>Herramienta<br>Google Forms · Microsoft Forms · Excel · Impreso · otra</th><th>Fecha programada</th><th>Estado</th><th>Observaciones</th></tr></thead><tbody><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr></tbody></table></div>
+<button class="add-row" onclick="addLinkedRow()">＋ Añadir fila</button>
+<div class="status-legend"><span class="legend-label">Estados:</span><span class="pill p"><b>P</b> Programada</span><span class="pill e"><b>E</b> En curso</span><span class="pill c"><b>C</b> Completada</span><span class="pill r"><b>R</b> Reprogramada</span></div>
+</section>
+<section class="section follow">
+<div class="section-head"><div class="step">02</div><div><h2>Hagamos seguimiento</h2><p>Revisemos el avance para asegurar que la información esté completa y organizada.</p></div></div>
+<div class="table-wrap"><table class="data-table" id="followTable"><thead><tr><th>Organización o comunidad</th><th>Formulario enviado<br>o visita realizada</th><th>Información recibida</th><th>Información revisada</th><th>Consolidada en la base de datos</th><th>Observaciones</th></tr></thead><tbody><tr><td class="linked-org"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr><tr><td class="linked-org"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr><tr><td class="linked-org"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr></tbody></table></div>
+<button class="add-row" onclick="addLinkedRow()">＋ Añadir fila</button>
+<div class="process"><strong>Ruta de seguimiento</strong><span>Enviado / realizado</span><span class="arrow">→</span><span>Recibido</span><span class="arrow">→</span><span>Revisado</span><span class="arrow">→</span><span>Consolidado</span></div>
+</section>
+<section class="report-section" id="reportSection">
+<div class="report-head"><div><div class="report-kicker">REPORTE AUTOMÁTICO</div><h2>Así va nuestra recolección</h2><p>Este resumen se actualiza automáticamente a medida que completamos la planificación.</p></div></div>
+<div class="report-grid" id="reportGrid"></div>
+<div class="report-table-wrap"><table class="report-table"><thead><tr><th>Organización o comunidad</th><th>Responsable</th><th>Modalidad</th><th>Fecha</th><th>Estado</th><th>Recibida</th><th>Revisada</th><th>Consolidada</th></tr></thead><tbody id="reportRows"></tbody></table></div>
+</section>
+<p class="footer-message">La información cobra sentido cuando se convierte en acciones que fortalecen a la organización.</p>
+</div>
+<script>
+const statusLabels={P:'Programada',E:'En curso',C:'Completada',R:'Reprogramada'};
+function pintarEstado(sel){sel.setAttribute('data-v',sel.value);actualizarReporte()}
+function rowVacia(tipo){
+ const isPlan=tipo==='planningTable';
+ if(isPlan)return `<tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr>`;
+ return `<tr><td class="linked-org"></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td><select class="status-select" data-v="" onchange="pintarEstado(this)"><option value=""></option><option value="P">P · Programada</option><option value="E">E · En curso</option><option value="C">C · Completada</option><option value="R">R · Reprogramada</option></select></td><td contenteditable="true"></td></tr>`;
+}
+function addLinkedRow(){
+ document.querySelector('#planningTable tbody').insertAdjacentHTML('beforeend',rowVacia('planningTable'));
+ document.querySelector('#followTable tbody').insertAdjacentHTML('beforeend',rowVacia('followTable'));
+ syncFollowOrganizations();actualizarReporte();
+ const row=document.querySelector('#planningTable tbody tr:last-child');row?.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function syncFollowOrganizations(){
+ const plans=[...document.querySelectorAll('#planningTable tbody tr')];
+ const follows=[...document.querySelectorAll('#followTable tbody tr')];
+ follows.forEach((r,i)=>{const org=plans[i]?.querySelector('td');const target=r.querySelector('.linked-org');if(target){target.textContent=org?.innerText.trim()||'';target.title=target.textContent?'Vinculado a la planificación de la fila '+(i+1):'Se completa automáticamente desde el punto 01';}});
+}
+function limpiar(id){if(!confirm('¿Borrar todo lo escrito en esta herramienta?'))return;const root=document.getElementById(id);root.querySelectorAll('[contenteditable]').forEach(e=>e.innerHTML='');root.querySelectorAll('select').forEach(s=>{s.value='';s.setAttribute('data-v','')});['planningTable','followTable'].forEach(id=>{const tbody=document.querySelector('#'+id+' tbody');while(tbody.rows.length>3)tbody.deleteRow(-1)});syncFollowOrganizations();actualizarReporte()}
+function getPlanData(){
+ return [...document.querySelectorAll('#planningTable tbody tr')].map((r,i)=>{const c=r.querySelectorAll('td');return{fila:i+1,org:c[0]?.innerText.trim()||'',resp:c[1]?.innerText.trim()||'',modal:c[2]?.innerText.trim()||'',herr:c[3]?.innerText.trim()||'',fecha:c[4]?.innerText.trim()||'',estado:r.querySelector('select')?.value||'',obs:c[6]?.innerText.trim()||''}}).filter(x=>x.org||x.resp||x.modal||x.herr||x.fecha||x.estado||x.obs);
+}
+function getFollowData(){
+ return [...document.querySelectorAll('#followTable tbody tr')].map((r,i)=>{const c=r.querySelectorAll('td'),ss=r.querySelectorAll('select');return{fila:i+1,org:c[0]?.innerText.trim()||'',enviado:ss[0]?.value||'',recibida:ss[1]?.value||'',revisada:ss[2]?.value||'',consolidada:ss[3]?.value||'',obs:c[5]?.innerText.trim()||''}}).filter(x=>x.org||x.enviado||x.recibida||x.revisada||x.consolidada||x.obs);
+}
+function actualizarReporte(){
+ syncFollowOrganizations();
+ const data=getPlanData(), follow=getFollowData();
+ const counts={total:data.length,P:0,E:0,C:0,R:0};data.forEach(x=>{if(counts[x.estado]!==undefined)counts[x.estado]++});
+ const rec=follow.filter(x=>x.recibida==='C').length, rev=follow.filter(x=>x.revisada==='C').length, con=follow.filter(x=>x.consolidada==='C').length;
+ document.getElementById('reportGrid').innerHTML=`<div class="metric"><b>${counts.total}</b><span>Registros planificados</span></div><div class="metric"><b>${counts.P}</b><span>Programadas</span></div><div class="metric"><b>${counts.E}</b><span>En curso</span></div><div class="metric"><b>${counts.C}</b><span>Completadas</span></div><div class="metric"><b>${counts.total?Math.round(counts.C/counts.total*100):0}%</b><span>Avance completado</span></div><div class="metric"><b>${rec}</b><span>Información recibida</span></div><div class="metric"><b>${rev}</b><span>Información revisada</span></div><div class="metric"><b>${con}</b><span>Información consolidada</span></div>`;
+ const rr=document.getElementById('reportRows');rr.innerHTML=data.length?data.map(x=>{const f=follow.find(y=>y.fila===x.fila)||{};return `<tr><td>${esc(x.org)}</td><td>${esc(x.resp)}</td><td>${esc(x.modal)}</td><td>${esc(x.fecha)}</td><td><span class="report-status ${x.estado.toLowerCase()}">${x.estado?x.estado+' · '+statusLabels[x.estado]:'—'}</span></td><td>${f.recibida==='C'?'✓':'—'}</td><td>${f.revisada==='C'?'✓':'—'}</td><td>${f.consolidada==='C'?'✓':'—'}</td></tr>`}).join(''):`<tr><td colspan="8" class="report-empty">El reporte aparecerá aquí cuando comiences a diligenciar la planificación.</td></tr>`;
+}
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function exportProject(){
+  const data={
+    version:1,
+    tool:'Herramienta 5 · Planificando y monitoreando nuestra recolección de información',
+    savedAt:new Date().toISOString(),
+    planning:Array.from(document.querySelectorAll('#planningTable tbody tr')).map(row=>({
+      cells:Array.from(row.querySelectorAll('td[contenteditable="true"]')).map(el=>el.innerHTML),
+      status:row.querySelector('select')?.value||''
+    })),
+    follow:Array.from(document.querySelectorAll('#followTable tbody tr')).map(row=>({
+      cells:Array.from(row.querySelectorAll('td[contenteditable="true"]')).map(el=>el.innerHTML),
+      status:Array.from(row.querySelectorAll('select')).map(el=>el.value||'')
+    }))
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='Herramienta 5 - Planificación_proyecto.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importProject(event){
+  const file=event.target.files&&event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data||!Array.isArray(data.planning)||!Array.isArray(data.follow)){
+        throw new Error('El archivo no tiene el formato de proyecto esperado.');
+      }
+
+      const planningBody=document.querySelector('#planningTable tbody');
+      const followBody=document.querySelector('#followTable tbody');
+
+      while(planningBody.rows.length>0)planningBody.deleteRow(-1);
+      while(followBody.rows.length>0)followBody.deleteRow(-1);
+
+      const rows=Math.max(data.planning.length,data.follow.length,3);
+      for(let i=0;i<rows;i++){
+        planningBody.insertAdjacentHTML('beforeend',rowVacia('planningTable'));
+        followBody.insertAdjacentHTML('beforeend',rowVacia('followTable'));
+      }
+
+      data.planning.forEach((item,i)=>{
+        const row=planningBody.rows[i];
+        if(!row)return;
+        const editable=row.querySelectorAll('td[contenteditable="true"]');
+        (item.cells||[]).forEach((value,j)=>{if(editable[j])editable[j].innerHTML=value||''});
+        const select=row.querySelector('select');
+        if(select){
+          select.value=item.status||'';
+          select.setAttribute('data-v',select.value);
+        }
+      });
+
+      data.follow.forEach((item,i)=>{
+        const row=followBody.rows[i];
+        if(!row)return;
+        const editable=row.querySelectorAll('td[contenteditable="true"]');
+        (item.cells||[]).forEach((value,j)=>{if(editable[j])editable[j].innerHTML=value||''});
+        const selects=row.querySelectorAll('select');
+        (item.status||[]).forEach((value,j)=>{
+          if(selects[j]){
+            selects[j].value=value||'';
+            selects[j].setAttribute('data-v',selects[j].value);
+          }
+        });
+      });
+
+      syncFollowOrganizations();
+      actualizarReporte();
+      alert('Proyecto importado correctamente.');
+    }catch(err){
+      alert('No fue posible importar el proyecto: '+err.message);
+    }finally{
+      event.target.value='';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportExcel(){
+ if(!window.XLSX){alert('No fue posible cargar el exportador de Excel. Verifica tu conexión a internet y vuelve a intentarlo.');return}
+ syncFollowOrganizations();const plans=getPlanData(), follows=getFollowData(), wb=XLSX.utils.book_new();
+ const planRows=plans.map(x=>({'N°':x.fila,'Organización o comunidad':x.org,'Persona responsable':x.resp,'Modalidad':x.modal,'Herramienta':x.herr,'Fecha programada':x.fecha,'Estado':x.estado?x.estado+' · '+statusLabels[x.estado]:'','Observaciones':x.obs}));
+ const followRows=follows.map(x=>({'N°':x.fila,'Organización o comunidad':x.org,'Formulario enviado o visita realizada':x.enviado?x.enviado+' · '+statusLabels[x.enviado]:'','Información recibida':x.recibida?x.recibida+' · '+statusLabels[x.recibida]:'','Información revisada':x.revisada?x.revisada+' · '+statusLabels[x.revisada]:'','Consolidada en la base de datos':x.consolidada?x.consolidada+' · '+statusLabels[x.consolidada]:'','Observaciones':x.obs}));
+ const reportRows=plans.map(x=>{const f=follows.find(y=>y.fila===x.fila)||{};return({'N°':x.fila,'Organización o comunidad':x.org,'Responsable':x.resp,'Modalidad':x.modal,'Fecha':x.fecha,'Estado planificación':x.estado?x.estado+' · '+statusLabels[x.estado]:'','Información recibida':f.recibida==='C'?'Sí':'No','Información revisada':f.revisada==='C'?'Sí':'No','Información consolidada':f.consolidada==='C'?'Sí':'No'});});
+ const ws1=XLSX.utils.json_to_sheet(planRows),ws2=XLSX.utils.json_to_sheet(followRows),ws3=XLSX.utils.json_to_sheet(reportRows);[ws1,ws2,ws3].forEach(ws=>ws['!cols']=[{wch:8},{wch:30},{wch:24},{wch:16},{wch:22},{wch:18},{wch:20},{wch:35}]);
+ XLSX.utils.book_append_sheet(wb,ws1,'01 Planificación');XLSX.utils.book_append_sheet(wb,ws2,'02 Seguimiento');XLSX.utils.book_append_sheet(wb,ws3,'Reporte');XLSX.writeFile(wb,'Herramienta 5 - Planificación.xlsx');
+}
+async function exportPDFDesdeBoton(btn){const sheet=document.getElementById('sheet4');btn.disabled=true;const old=btn.textContent;btn.textContent='Generando…';try{const canvas=await html2canvas(sheet,{scale:2,backgroundColor:'#fffdf8',useCORS:true,scrollX:0,scrollY:-window.scrollY});const pdf=new window.jspdf.jsPDF('p','mm','a4');const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();const margin=8;const usableW=pw-margin*2;const imgH=canvas.height*usableW/canvas.width;const pageH=ph-margin*2;const imgData=canvas.toDataURL('image/png');let y=margin,page=0;while(page*pageH<imgH){if(page>0)pdf.addPage();pdf.addImage(imgData,'PNG',margin,margin-page*pageH,usableW,imgH,undefined,'FAST');page++}pdf.save('Herramienta 5 - Planificación.pdf')}catch(e){alert('No fue posible generar el PDF: '+e.message)}finally{btn.disabled=false;btn.textContent=old}}
+document.addEventListener('input',e=>{if(e.target.matches('[contenteditable]'))actualizarReporte()});document.addEventListener('DOMContentLoaded',actualizarReporte);
+</script>
+</body>
+</html>

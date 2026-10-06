@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constructor de Instrumentos — Tool Basket</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  --ink:#26332e;
+  --muted:#6f7b75;
+  --line:#d9dfda;
+  --paper:#fbfaf6;
+  --white:#fff;
+  --green:#365947;
+  --green-2:#52725d;
+  --sage:#dfe8df;
+  --sand:#eee7d8;
+  --clay:#a76f50;
+  --soft:#f3f5f1;
+  --danger:#a84e45;
+  --blue:#466b7a;
+  --shadow:0 8px 30px rgba(35,52,43,.07);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.45;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1180px;margin:auto;padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:34px;height:34px;border:1px solid var(--green);border-radius:50%;
+  display:grid;place-items:center;color:var(--green);position:relative
+}
+.brand-mark:before,.brand-mark:after{content:"";position:absolute;border:1px solid var(--green);border-radius:50%}
+.brand-mark:before{width:18px;height:8px;transform:rotate(45deg)}
+.brand-mark:after{width:8px;height:18px;transform:rotate(45deg)}
+.brand strong{font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.08em}
+.status{font-size:12px;color:var(--muted)}
+.status span{color:var(--green);font-weight:650}
+main{max-width:1180px;margin:0 auto;padding:42px 24px 80px}
+.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:28px;align-items:end;margin-bottom:34px}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green-2);font-weight:750}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(38px,5vw,62px);line-height:.98;margin:9px 0 15px;letter-spacing:-.03em}
+.hero p{max-width:700px;color:var(--muted);font-size:16px;margin:0}
+.path{
+  border:1px solid var(--line);border-radius:18px;background:var(--white);padding:17px 18px;
+  box-shadow:var(--shadow)
+}
+.path-title{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:12px}
+.path-row{display:flex;align-items:center;gap:9px;font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.path-step{display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--green)}
+.dot.active{background:var(--green)}
+.path-line{height:1px;background:var(--line);flex:1}
+
+.panel{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden
+}
+.panel-head{
+  padding:18px 22px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:15px
+}
+.panel-head h2{font-size:14px;text-transform:uppercase;letter-spacing:.1em;margin:0}
+.panel-head p{font-size:12px;color:var(--muted);margin:3px 0 0}
+.panel-body{padding:22px}
+.grid{display:grid;gap:17px}
+.grid.two{grid-template-columns:1fr 1fr}
+.field label{
+  display:block;font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;
+  color:#56625c;margin-bottom:7px
+}
+input,textarea,select{
+  width:100%;border:1px solid var(--line);background:#fcfcfa;color:var(--ink);
+  border-radius:9px;padding:11px 12px;outline:none;transition:.18s
+}
+input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(54,89,71,.08)}
+textarea{resize:vertical;min-height:92px}
+.helper{font-size:11px;color:var(--muted);margin-top:5px}
+.builder-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:start}
+.option-list{display:grid;gap:8px;margin-top:9px}
+.option-row{display:flex;gap:8px}
+.option-row input{flex:1}
+.icon-btn{
+  border:1px solid var(--line);background:var(--white);color:var(--muted);
+  width:39px;border-radius:9px
+}
+.icon-btn:hover{color:var(--danger);border-color:#d8aaa5}
+.add-option{
+  border:0;background:none;color:var(--green);font-weight:700;font-size:12px;padding:7px 0
+}
+.advanced{
+  border-top:1px solid var(--line);margin-top:20px;padding-top:16px
+}
+details summary{cursor:pointer;font-size:12px;font-weight:750;color:var(--green);list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary:before{content:"＋";margin-right:7px}
+details[open] summary:before{content:"−"}
+.advanced-content{margin-top:16px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-top:12px}
+.switch{position:relative;width:40px;height:22px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#cbd2cd;border-radius:20px;transition:.2s}
+.slider:before{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s}
+.switch input:checked + .slider{background:var(--green)}
+.switch input:checked + .slider:before{transform:translateX(18px)}
+.primary{
+  border:0;background:var(--green);color:white;padding:12px 17px;border-radius:9px;
+  font-weight:750;letter-spacing:.02em
+}
+.primary:hover{background:#2d4b3a}
+.secondary{
+  border:1px solid var(--line);background:var(--white);color:var(--ink);padding:11px 15px;border-radius:9px;font-weight:700
+}
+.secondary:hover{border-color:var(--green);color:var(--green)}
+.danger{color:var(--danger)}
+.danger-btn{color:var(--danger)!important}
+.section-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.section-list{display:grid;gap:8px;margin-top:10px}
+.section-chip{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#fcfcfa}
+.coverage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.coverage-card{border:1px solid var(--line);border-radius:10px;padding:13px;background:#fcfcfa}
+.coverage-card strong{display:block;font-size:22px;font-family:Georgia,serif;color:var(--green)}
+.history-item{border-left:3px solid var(--green);padding:9px 12px;margin-bottom:10px;background:#fcfcfa}
+.import-label{display:inline-flex;align-items:center;border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 15px;border-radius:9px;font-weight:700;cursor:pointer}
+.builder-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
+.empty{
+  padding:38px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);
+  border-radius:12px;background:#fcfcfa
+}
+.empty strong{display:block;color:var(--ink);margin-bottom:5px}
+.instrument-head{
+  display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:16px
+}
+.count{font-size:12px;color:var(--muted)}
+.question-list{display:grid;gap:12px}
+.question-card{
+  border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden
+}
+.q-main{padding:17px 18px}
+.q-top{display:flex;align-items:start;gap:12px}
+.drag{
+  color:#a1aaa5;font-size:17px;line-height:1;cursor:grab;padding-top:2px
+}
+.q-number{font-family:Georgia,serif;font-size:22px;color:var(--clay);min-width:30px}
+.q-meta{flex:1}
+.q-topic{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--green-2);font-weight:800}
+.q-text{font-size:15px;margin:5px 0 8px}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-size:10px;padding:4px 7px;border-radius:999px;background:var(--soft);color:#59655f}
+.badge.green{background:var(--sage);color:var(--green)}
+.q-actions{display:flex;gap:5px}
+.q-actions button{border:0;background:none;color:var(--muted);font-size:11px;padding:5px}
+.q-actions button:hover{color:var(--green)}
+.q-details{display:none;border-top:1px solid var(--line);padding:14px 18px;background:#fcfcfa;font-size:12px}
+.question-card.open .q-details{display:block}
+.preview-answer{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.preview-answer textarea{min-height:70px}
+.radio-list,.check-list{display:grid;gap:7px;margin-top:7px}
+.radio-list label,.check-list label{font-size:12px;color:#4e5954}
+.radio-list input,.check-list input{width:auto;margin-right:7px}
+.scale-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.scale-item{border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:11px;background:white}
+.footer-actions{
+  position:sticky;bottom:15px;z-index:10;background:rgba(251,250,246,.95);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:14px;padding:11px;box-shadow:var(--shadow);
+  display:flex;justify-content:space-between;gap:10px;margin-top:24px
+}
+.footer-actions .left,.footer-actions .right{display:flex;gap:8px}
+.modal{
+  display:none;position:fixed;inset:0;background:rgba(25,34,29,.42);z-index:50;padding:30px;overflow:auto
+}
+.modal.show{display:block}
+.modal-box{max-width:920px;margin:0 auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 20px 70px rgba(0,0,0,.18)}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{margin:0;font-family:Georgia,serif;font-weight:500}
+.modal-body{padding:34px;max-height:76vh;overflow:auto}
+.doc-title{font-family:Georgia,serif;font-size:34px;font-weight:500;margin:0 0 8px}
+.doc-sub{color:var(--muted);font-size:12px;margin-bottom:30px}
+.preview-section{margin-top:25px}
+.preview-section h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin:0 0 10px}
+.preview-question{padding:15px 0;border-top:1px solid #e3e6e3}\n.preview-question[style*="display:none"]{display:none!important}\n.conditional-note{margin-top:8px;padding:8px 10px;border-left:3px solid var(--terracotta);background:var(--sand-warm);border-radius:6px}
+.preview-question strong{font-size:13px}
+.preview-lines{margin-top:12px}
+.preview-line{height:22px;border-bottom:1px solid #ccd2ce}
+.close{border:0;background:none;font-size:22px;color:var(--muted)}
+.toast{
+  position:fixed;right:22px;bottom:22px;background:var(--ink);color:white;padding:11px 14px;border-radius:9px;
+  font-size:12px;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s;z-index:80
+}
+.toast.show{opacity:1;transform:none}
+@media(max-width:850px){
+  .hero,.builder-layout,.grid.two{grid-template-columns:1fr}
+  .path{display:none}
+  main{padding:28px 15px 70px}
+  .topbar-inner{padding:13px 15px}
+  .footer-actions{position:static;flex-direction:column}
+  .footer-actions .left,.footer-actions .right{width:100%}
+  .footer-actions button{flex:1}
+}
+@media print{
+  .topbar,.hero,.builder-layout,.panel-head,.footer-actions,.modal-head{display:none!important}
+  body{background:white}
+  main{padding:0;max-width:none}
+  .panel{border:0;box-shadow:none}
+  .panel-body{padding:0}
+  #instrumentPanel{display:block!important}
+  .question-card{break-inside:avoid}
+  .q-actions,.drag,.q-details{display:none!important}
+}
+.danger-btn{color:#8b3f3f;border-color:#d9b8b8}.danger-btn:hover{background:#fbefef;border-color:#c98f8f}
+
+/* Paleta cálida */
+:root{
+ --warm-terracotta:#b86f52;--warm-orange:#d99a52;--warm-gold:#d7b45a;
+ --warm-green:#526a50;
+}
+body{background:#f4eee5}
+.topbar{background:rgba(246,239,228,.95);border-bottom-color:#dfd2c1}
+.brand-mark{border-color:var(--warm-terracotta);color:var(--warm-terracotta)}
+.brand-mark:before,.brand-mark:after{border-color:var(--warm-terracotta)}
+.brand small{color:#8a7868}.status span{color:var(--warm-green)}
+.eyebrow{color:var(--warm-terracotta)}
+.path{background:#fffaf3;border-color:#dfd2c1}.path-title{color:#8a7868}
+.dot{border-color:var(--warm-terracotta)}.dot.active{background:var(--warm-terracotta)}
+.path-line{background:#dfd2c1}
+.panel{border-color:#dfd2c1}
+.panel-head{background:linear-gradient(90deg,#f8f0e6,#fffaf4 58%,#fff);border-bottom-color:#dfd2c1}
+.panel-head h2{color:#4f5f50}.field label{color:#66584d}
+input,textarea,select{background:#fffdf9;border-color:#d9cdbd}
+input:focus,textarea:focus,select:focus{border-color:var(--warm-terracotta);box-shadow:0 0 0 3px rgba(184,111,82,.10)}
+.helper{color:#87786b}
+.secondary{border-color:#d9cdbd;background:#fffaf4}
+.secondary:hover{border-color:var(--warm-terracotta);color:var(--warm-terracotta)}
+.primary{background:var(--warm-green)}.primary:hover{background:#435942}
+.add-option,details summary{color:var(--warm-terracotta)}
+.advanced{border-top-color:#dfd2c1}.toggle-row{border-color:#d9cdbd;background:#fffaf4}
+.slider{background:#d7cec3}.switch input:checked + .slider{background:var(--warm-green)}
+.section-chip,.coverage-card{border-color:#d9cdbd;background:#fffaf4}
+.coverage-card strong{color:var(--warm-terracotta)}
+.history-item{border-left-color:var(--warm-terracotta);background:#fffaf4}
+.import-label,.empty{border-color:#d9cdbd;background:#fffaf4}
+.empty strong{color:#4f5f50}
+.q-number{color:var(--warm-terracotta)}.q-topic{color:var(--warm-green)}
+.question-card{border-color:#d9cdbd}
+.badge{background:#f1e9df;color:#685b50}.badge.green{background:#e4eadf;color:#526a50}
+.q-details{border-top-color:#e2d7ca;background:#fcf7f0}
+.preview-answer{border-top-color:#e2d7ca}.scale-item{border-color:#d9cdbd;background:#fffaf4}
+.footer-actions{background:rgba(246,239,228,.96);border-color:#d9cdbd}
+.modal-box{background:#fffdf9}.modal-head{background:#f8f0e6;border-bottom-color:#dfd2c1}
+.preview-section h3{color:var(--warm-terracotta)}.preview-question{border-top-color:#e2d7ca}
+.preview-line{border-bottom-color:#d8cdbf}.close{color:#7d6d60}
+
+</style>
+
+<style id="warm-expanded-palette">
+/* Expanded warm palette — visual layer only */
+:root{
+  --terracotta:#b85c45;
+  --terracotta-soft:#f2ddd4;
+  --ochre:#c58a35;
+  --ochre-soft:#f3e6c9;
+  --clay-light:#ead1c4;
+  --rust:#9f4d3d;
+  --gold:#d2a84a;
+  --sage-warm:#d8dfc9;
+  --olive:#68734f;
+  --sand-warm:#f4ead9;
+  --peach:#f5dfd1;
+  --rose-warm:#ead4d0;
+  --blue-warm:#6f8790;
+}
+
+/* Hero and navigation accents */
+.eyebrow{color:var(--terracotta)!important}
+.brand-mark{border-color:var(--terracotta)!important;color:var(--terracotta)!important}
+.brand-mark:before,.brand-mark:after{border-color:var(--terracotta)!important}
+.status span{color:var(--olive)!important}
+.path{background:linear-gradient(135deg,#fffdf8 0%,var(--sand-warm) 100%)!important}
+.dot{border-color:var(--terracotta)!important}
+.dot.active{background:var(--terracotta)!important}
+.path-line{background:var(--clay-light)!important}
+
+/* Section headers */
+.panel-head{
+  background:linear-gradient(90deg,var(--sand-warm) 0%,#fffaf2 72%,#fff 100%)!important;
+  border-bottom-color:var(--clay-light)!important;
+}
+.panel-head h2{color:var(--rust)!important}
+
+/* Alternate panel accents */
+.panel:nth-of-type(2) .panel-head{border-left:5px solid var(--ochre)!important}
+.panel:nth-of-type(3) .panel-head{border-left:5px solid var(--terracotta)!important}
+.panel:nth-of-type(4) .panel-head{border-left:5px solid var(--olive)!important}
+.panel:nth-of-type(5) .panel-head{border-left:5px solid var(--blue-warm)!important}
+
+/* Inputs */
+input,textarea,select{
+  background:#fffdf9!important;
+  border-color:#dfd2c0!important;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--terracotta)!important;
+  box-shadow:0 0 0 3px rgba(184,92,69,.10)!important;
+}
+
+/* Buttons */
+.primary{
+  background:var(--terracotta)!important;
+}
+.primary:hover{background:var(--rust)!important}
+.secondary:hover{
+  border-color:var(--ochre)!important;
+  color:var(--rust)!important;
+}
+.add-option{
+  color:var(--olive)!important;
+}
+
+/* Builder helper area */
+.empty{
+  background:linear-gradient(135deg,#fffaf1 0%,#f5eadb 100%)!important;
+  border-color:#dfc9ad!important;
+}
+.empty strong{color:var(--rust)!important}
+
+/* Question cards */
+.question-card{
+  border-color:#dfd2c0!important;
+  background:#fffefa!important;
+}
+.question-card:nth-child(4n+1){border-left:4px solid var(--terracotta)!important}
+.question-card:nth-child(4n+2){border-left:4px solid var(--ochre)!important}
+.question-card:nth-child(4n+3){border-left:4px solid var(--olive)!important}
+.question-card:nth-child(4n){border-left:4px solid var(--blue-warm)!important}
+
+.q-number{color:var(--terracotta)!important}
+.q-topic{color:var(--olive)!important}
+.badge.green{
+  background:var(--sage-warm)!important;
+  color:#53623f!important;
+}
+.badge{
+  background:#f3e8d9!important;
+  color:#735d4c!important;
+}
+.q-details{
+  background:#fcf6ec!important;
+  border-top-color:#e2d3c0!important;
+}
+.scale-item{
+  background:#fffaf1!important;
+  border-color:#decdb6!important;
+}
+
+/* Section chips and cards */
+.section-chip{
+  background:#fffaf1!important;
+  border-color:#dfccb4!important;
+}
+.coverage-card{
+  background:#fff8ed!important;
+  border-color:#dfcdb7!important;
+}
+.history-item{
+  background:#fff7eb!important;
+  border-left-color:var(--terracotta)!important;
+}
+
+/* Sticky actions */
+.footer-actions{
+  background:rgba(250,242,230,.96)!important;
+  border-color:#dccab4!important;
+}
+
+/* Advanced settings */
+.advanced{
+  border-top-color:#e2d1bd!important;
+}
+details summary{color:var(--rust)!important}
+.toggle-row{
+  background:#fffaf2!important;
+  border-color:#dfcfba!important;
+}
+.switch input:checked + .slider{background:var(--olive)!important}
+
+/* Modals */
+.modal-box{background:#fffdf9!important}
+.modal-head{
+  background:linear-gradient(90deg,var(--sand-warm),#fff)!important;
+  border-bottom-color:#dfd0bd!important;
+}
+.preview-section h3{color:var(--rust)!important}
+.preview-question{border-top-color:#e2d6c6!important}
+.preview-line{border-bottom-color:#d7c6b2!important}
+
+/* Danger action retains its role but gets warmer */
+.danger-btn{
+  color:#9a493d!important;
+  border-color:#d9b8aa!important;
+}
+.danger-btn:hover{
+  background:#f8e9e2!important;
+  border-color:#c98c7d!important;
+}
+
+/* Small visual warmth in the document title */
+.doc-title{color:#754d3d!important}
+</style>
+
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div><strong>Consolidemos nuestras preguntas</strong><small>Constructor de instrumentos</small></div>
+    </div>
+    <div class="status" id="saveStatus">Borrador · <span>Guardado localmente</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Diseñar · Organizar · Revisar · Exportar</div>
+      <h1>Construye un instrumento<br>con intención.</h1>
+      <p>Un espacio flexible para diseñar instrumentos de caracterización y mapeo organizativo. Crea preguntas, configura respuestas, revisa el instrumento y prepáralo para su aplicación.</p>
+    </div>
+    <div class="path">
+      <div class="path-title">Ruta del instrumento</div>
+      <div class="path-row">
+        <div class="path-step"><i class="dot active"></i>Diseñar</div>
+        <i class="path-line"></i>
+        <div class="path-step"><i class="dot"></i>Revisar</div>
+        <i class="path-line"></i>
+        <div class="path-step"><i class="dot"></i>Exportar</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><div><h2>Instrumento</h2><p>Define la información básica del instrumento.</p></div></div>
+    </div>
+    <div class="panel-body">
+      <div class="grid two">
+        <div class="field">
+          <label for="instrumentName">Nombre del instrumento</label>
+          <input id="instrumentName" value="Instrumento de Caracterización Organizativa" placeholder="Escribe un nombre">
+        </div>
+        <div class="field">
+          <label for="instrumentVersion">Version</label>
+          <input id="instrumentVersion" value="1.0" placeholder="1.0">
+        </div>
+      </div>
+      <div class="field" style="margin-top:17px">
+        <label for="instrumentDescription">Descripción</label>
+        <textarea id="instrumentDescription" style="min-height:70px" placeholder="Describe brevemente el propósito del instrumento.">Herramienta para recopilar información estructurada que apoye el fortalecimiento organizativo y la reflexión colectiva.</textarea>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>Secciones del instrumento</h2><p>Organiza las preguntas por dimensiones o bloques temáticos.</p></div>
+    </div>
+    <div class="panel-body">
+      <div class="section-row">
+        <input id="newSectionName" placeholder="Ej. Gobernanza y organización">
+        <button class="secondary" type="button" id="addSectionBtn">+ Agregar sección</button>
+      </div>
+      <div class="helper">Las preguntas podrán asociarse a una sección. Si no creas secciones, se usará el tema como agrupador.</div>
+      <div id="sectionList" class="section-list"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>Constructor de preguntas</h2><p>Crea una pregunta y configura cómo será respondida.</p></div>
+    </div>
+    <div class="panel-body">
+      <div class="builder-layout">
+        <div>
+          <div class="field">
+            <label for="section">Sección</label>
+            <select id="section"><option value="">Sin sección</option></select>
+          </div>
+          <div class="field" style="margin-top:17px">
+            <label for="topic">Tema</label>
+            <select id="topic"></select>
+          </div>
+          <div class="field" style="margin-top:17px">
+            <label for="questionText">Pregunta</label>
+            <textarea id="questionText" placeholder="Escribe la pregunta tal como aparecerá en el instrumento..."></textarea>
+          </div>
+          <div class="field" style="margin-top:17px">
+            <label for="responseType">Tipo de respuesta</label>
+            <select id="responseType"></select>
+          </div>
+          <div id="dynamicConfig" style="margin-top:17px"></div>
+
+          <details class="advanced">
+            <summary>Configuración avanzada</summary>
+            <div class="advanced-content">
+              <div class="field">
+                <label for="instructions">Instrucciones para quien responde</label>
+                <textarea id="instructions" style="min-height:65px" placeholder="Orientación opcional..."></textarea>
+              </div>
+              <div class="toggle-row">
+                <div><strong style="font-size:12px">Pregunta obligatoria</strong><div class="helper">La persona que responde debe proporcionar una respuesta.</div></div>
+                <label class="switch"><input type="checkbox" id="required"><span class="slider"></span></label>
+              </div>
+              <div class="grid two" style="margin-top:12px">
+                <div class="field">
+                  <label for="methodStatus">Estado metodológico</label>
+                  <select id="methodStatus">
+                    <option value="keep">Mantener</option>
+                    <option value="modify">Modificar</option>
+                    <option value="new">Nueva</option>
+                    <option value="pending">Pendiente de validación</option>
+                    <option value="exclude">Excluir</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="notes">Observaciones metodológicas</label>
+                  <input id="notes" placeholder="Nota interna (no se muestra a quien responde)">
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <div class="builder-actions">
+            <button class="secondary" id="clearBuilder">Limpiar</button>
+            <button class="primary" id="addQuestion">+ Agregar pregunta</button>
+          </div>
+        </div>
+
+        <div class="empty" style="align-self:stretch;display:flex;flex-direction:column;justify-content:center">
+          <strong>Construye una pregunta a la vez.</strong>
+          La configuración de respuesta cambia automáticamente según el tipo de pregunta seleccionado.
+          <div style="margin-top:18px;font-size:11px;line-height:1.8">
+            Texto abierto · Selección · Selección múltiple<br>
+            Numérica · Año · Fecha · Sí/No · Escala<br>Campos compuestos · Pregunta condicional
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="instrumentPanel">
+    <div class="panel-head">
+      <div>
+        <h2>Instrumento en construcción</h2>
+        <p id="questionCount">0 questions</p>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="instrument-head">
+        <div>
+          <div class="eyebrow" id="listEyebrow">Borrador del instrumento</div>
+          <div style="font-family:Georgia,serif;font-size:25px;margin-top:4px" id="listTitle">Instrumento de Caracterización Organizativa</div>
+        </div>
+        <div class="count">Las preguntas se numeran automáticamente.</div>
+      </div>
+      <div id="questionList" class="question-list"></div>
+    </div>
+  </section>
+
+  <div class="footer-actions">
+    <div class="left">
+      <button class="secondary" id="previewBtn">Vista previa</button>
+      <button class="secondary" id="printBtn">Imprimir / Guardar PDF</button>
+      <button class="secondary danger-btn" id="clearInstrumentBtn">Limpiar instrumento</button>
+    </div>
+    <div class="right">
+      <button class="secondary" id="coverageBtn">Cobertura</button>
+      <button class="secondary" id="historyBtn">Versiones</button>
+      <button class="secondary" id="exportJsonBtn">Exportar proyecto</button>
+      <label class="import-label" for="importJsonInput">Importar proyecto</label>
+      <input id="importJsonInput" type="file" accept="application/json,.json" hidden>
+      <button class="secondary" id="excelBtn">Exportar Excel</button>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="previewModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div><h2>Vista previa del instrumento</h2><div class="helper">Vista de aplicación</div></div>
+      <button class="close" id="closePreview">×</button>
+    </div>
+    <div class="modal-body" id="previewContent"></div>
+  </div>
+</div>
+<div class="modal" id="coverageModal">
+  <div class="modal-box"><div class="modal-head"><div><h2>Matriz de cobertura</h2><div class="helper">Revisión rápida del equilibrio del instrumento.</div></div><button class="close" id="closeCoverage">×</button></div><div class="modal-body" id="coverageContent"></div></div>
+</div>
+<div class="modal" id="historyModal">
+  <div class="modal-box"><div class="modal-head"><div><h2>Versiones del instrumento</h2><div class="helper">Cada guardado importante puede conservar una instantánea del diseño.</div></div><button class="close" id="closeHistory">×</button></div><div class="modal-body" id="historyContent"></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const topics = [
+  "Identificación","Ubicación","Trayectoria","Pueblos / Comunidades","Población","Territorio",
+  "Gobernanza","Personería jurídica","Estructura organizativa","Liderazgo","Participación",
+  "Conocimientos y cultura","Medio ambiente","Medios de vida","Otro"
+];
+
+const types = {
+  text:"Texto abierto",
+  short:"Texto corto",
+  single:"Selección única",
+  multiple:"Selección múltiple",
+  numeric:"Numérica",
+  year:"Año",
+  date:"Fecha",
+  yesno:"Sí / No",
+  scale:"Escala",
+  composite:"Campos compuestos",
+  conditional:"Pregunta condicional"
+};
+
+let questions = []; // Inicia siempre vacío para entregar un instrumento limpio
+let sections = [];
+let versionHistory = [];
+let editingId = null;
+const methodStatusLabels={keep:"Mantener",modify:"Modificar",new:"Nueva",pending:"Pendiente de validación",exclude:"Excluir"};
+
+
+const $ = id => document.getElementById(id);
+const topicEl = $("topic"), typeEl = $("responseType"), sectionEl=$("section");
+
+topics.forEach(t => { const o=document.createElement("option"); o.value=t; o.textContent=t; topicEl.appendChild(o); });
+Object.entries(types).forEach(([v,t]) => { const o=document.createElement("option"); o.value=v; o.textContent=t; typeEl.appendChild(o); });
+typeEl.value="text";
+
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function escapeHtml(s=""){ return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c])); }
+function save(snapshot=true){
+  localStorage.setItem("toolBasketQuestions",JSON.stringify(questions));
+  localStorage.setItem("toolBasketSections",JSON.stringify(sections));
+  localStorage.setItem("toolBasketMeta",JSON.stringify({name:$("instrumentName").value,version:$("instrumentVersion").value,description:$("instrumentDescription").value}));
+  if(snapshot){
+    const snap={date:new Date().toISOString(),version:$("instrumentVersion").value,name:$("instrumentName").value,questions:JSON.parse(JSON.stringify(questions)),sections:JSON.parse(JSON.stringify(sections))};
+    versionHistory=[snap,...versionHistory].slice(0,12);
+    localStorage.setItem("toolBasketHistory",JSON.stringify(versionHistory));
+  }
+  $("saveStatus").innerHTML="Borrador · <span>Guardado localmente</span>";
+}
+function toast(msg){
+  const t=$("toast"); t.textContent=msg;t.classList.add("show");
+  clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),1800);
+}
+function renderSections(){
+  sectionEl.innerHTML='<option value="">Sin sección</option>'+sections.map(x=>`<option value="${x.id}">${escapeHtml(x.name)}</option>`).join("");
+  const list=$("sectionList");
+  list.innerHTML=sections.length?sections.map(x=>`<div class="section-chip"><span>${escapeHtml(x.name)}</span><button type="button" class="icon-btn" onclick="removeSection('${x.id}')">×</button></div>`).join(""): '<div class="helper">Todavía no hay secciones personalizadas.</div>';
+}
+window.removeSection=id=>{if(questions.some(q=>q.sectionId===id)){if(!confirm("Hay preguntas asociadas a esta sección. ¿Eliminar la sección y dejar esas preguntas sin sección?"))return;questions.forEach(q=>{if(q.sectionId===id)q.sectionId=""});}sections=sections.filter(x=>x.id!==id);renderSections();save();renderQuestions();toast("Sección eliminada.")};
+$("addSectionBtn").onclick=()=>{const name=$("newSectionName").value.trim();if(!name){toast("Escribe un nombre para la sección.");return}if(sections.some(x=>x.name.toLowerCase()===name.toLowerCase())){toast("Esa sección ya existe.");return}sections.push({id:uid(),name});$("newSectionName").value="";renderSections();save();toast("Sección agregada.")};
+
+function configForType(type, data={}){
+  const wrap=$("dynamicConfig"); wrap.innerHTML="";
+  if(["single","multiple"].includes(type)){
+    const label=document.createElement("div"); label.className="field";
+    label.innerHTML='<label>Opciones de respuesta</label><div class="helper">Agrega, elimina o edita las opciones disponibles.</div><div id="options" class="option-list"></div><button type="button" class="add-option" id="addOption">+ Agregar opción</button>';
+    wrap.appendChild(label);
+    const list=$("options");
+    const opts=data.options?.length?data.options:["Opción 1","Opción 2"];
+    opts.forEach(o=>addOptionRow(o));
+    $("addOption").onclick=()=>addOptionRow("");
+  } else if(type==="scale"){
+    wrap.innerHTML=`
+      <div class="grid two">
+        <div class="field"><label>Nombre de la escala</label><input id="scaleName" value="${escapeHtml(data.scaleName||"Nivel de desarrollo")}"></div>
+        <div class="field"><label>Niveles de la escala</label><input id="scaleLevels" type="number" min="2" max="10" value="${data.scaleLevels||5}"></div>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Etiquetas de los niveles</label><div id="scaleLabels" class="option-list"></div></div>`;
+    renderEscalaLabels(data.scaleLabels||["Inicial","Emergente","En desarrollo","Consolidado","Fortalecido"]);
+    $("scaleLevels").onchange=()=>renderEscalaLabels();
+  } else if(type==="composite"){
+    wrap.innerHTML=`
+      <div class="field">
+        <label>Campos que componen la pregunta</label>
+        <div class="helper">Útil para preguntas como ubicación, contacto o información territorial.</div>
+        <div id="compositeFields" class="option-list"></div>
+        <button type="button" class="add-option" id="addCompositeField">+ Agregar campo</button>
+      </div>`;
+    const values=data.compositeFields?.length
+      ? data.compositeFields.map(v=>typeof v === "string" ? {label:v,type:"short"} : v)
+      : [{label:"Departamento",type:"short"},{label:"Municipio / Distrito",type:"short"}];
+    values.forEach(v=>addCompositeRow(v));
+    $("addCompositeField").onclick=()=>addCompositeRow("");
+  } else if(type==="conditional"){
+    const available=questions.filter(q=>q.id!==editingId);
+    wrap.innerHTML=`
+      <div class="field">
+        <label>Pregunta de la que depende</label>
+        <select id="parentQuestion">
+          <option value="">Selecciona una pregunta anterior</option>
+          ${available.map(q=>`<option value="${q.id}" ${data.parentQuestion===q.id?"selected":""}>${escapeHtml(q.question)}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Mostrar esta pregunta cuando la respuesta sea</label>
+        <input id="triggerValue" value="${escapeHtml(data.triggerValue||"Sí")}" placeholder="Ej. Sí">
+        <div class="helper">La condición se conserva en el proyecto y se muestra en la vista previa.</div>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Tipo de respuesta de esta pregunta</label>
+        <select id="conditionalAnswerType">
+          <option value="text" ${data.conditionalAnswerType==="text"?"selected":""}>Texto abierto</option>
+          <option value="short" ${data.conditionalAnswerType==="short"?"selected":""}>Texto corto</option>
+          <option value="numeric" ${data.conditionalAnswerType==="numeric"?"selected":""}>Numérica</option>
+          <option value="year" ${data.conditionalAnswerType==="year"?"selected":""}>Año</option>
+        </select>
+      </div>`;
+  } else if(type==="numeric"){
+    wrap.innerHTML='<div class="helper">La persona que responde verá un campo numérico. Más adelante pueden añadirse límites mínimos y máximos.</div>';
+  } else if(type==="year"){
+    wrap.innerHTML='<div class="helper">La persona que responde verá un campo para indicar el año.</div>';
+  } else if(type==="date"){
+    wrap.innerHTML='<div class="helper">La persona que responde verá un campo de fecha.</div>';
+  } else if(type==="yesno"){
+    wrap.innerHTML='<div class="field"><label>Opción adicional</label><input id="yesnoExtra" value="'+escapeHtml(data.yesnoExtra||"No sabe / No aplica")+'"><div class="helper">Las opciones estándar son Sí y No.</div></div>';
+  } else {
+    wrap.innerHTML='<div class="helper">Se generará un campo de respuesta libre en el instrumento.</div>';
+  }
+}
+function addOptionRow(value){
+  const row=document.createElement("div");row.className="option-row";
+  row.innerHTML='<input value="'+escapeHtml(value)+'"><button type="button" class="icon-btn" aria-label="Eliminar opción">×</button>';
+  row.querySelector("button").onclick=()=>row.remove();
+  $("options").appendChild(row);
+}
+function renderEscalaLabels(values){
+  const list=$("scaleLabels"); if(!list)return;
+  const n=parseInt($("scaleLevels").value||5);
+  const current=[...values];
+  list.innerHTML="";
+  for(let i=0;i<n;i++){
+    const row=document.createElement("div");row.className="option-row";
+    row.innerHTML='<input value="'+escapeHtml(current[i]||("Nivel "+(i+1)))+'"><span style="width:28px;padding-top:10px;font-size:11px;color:var(--muted)">'+(i+1)+'</span>';
+    list.appendChild(row);
+  }
+}
+function addCompositeRow(field){
+  const row=document.createElement("div");row.className="option-row";
+  row.innerHTML='<input class="composite-label" placeholder="Nombre del campo" value="'+escapeHtml(field.label||"")+'">'+
+    '<select class="composite-type" style="max-width:150px"><option value="short">Texto corto</option><option value="numeric">Numérica</option><option value="year">Año</option><option value="date">Fecha</option></select>'+
+    '<button type="button" class="icon-btn" aria-label="Eliminar campo">×</button>';
+  row.querySelector(".composite-type").value=field.type||"short";
+  row.querySelector("button").onclick=()=>row.remove();
+  $("compositeFields").appendChild(row);
+}
+function addConditionalOptionRow(value){
+  const row=document.createElement("div");row.className="option-row";
+  row.innerHTML='<input value="'+escapeHtml(value)+'"><button type="button" class="icon-btn" aria-label="Eliminar opción">×</button>';
+  row.querySelector("input").addEventListener("input",()=>refreshConditionSelect());
+  row.querySelector("button").onclick=()=>{row.remove();refreshConditionSelect()};
+  $("conditionalOptions").appendChild(row);
+  refreshConditionSelect();
+}
+function refreshConditionSelect(selected){
+  const sel=$("conditionValue"); if(!sel)return;
+  const current=selected||sel.value;
+  const vals=[...document.querySelectorAll("#conditionalOptions input")].map(x=>x.value.trim()).filter(Boolean);
+  sel.innerHTML=vals.map(v=>'<option value="'+escapeHtml(v)+'">'+escapeHtml(v)+'</option>').join("");
+  if(vals.includes(current))sel.value=current;
+}
+function readDynamic(){
+  const type=typeEl.value, data={};
+  if(["single","multiple"].includes(type)) data.options=[...document.querySelectorAll("#options input")].map(x=>x.value.trim()).filter(Boolean);
+  if(type==="scale"){
+    data.scaleName=$("scaleName")?.value||"";
+    data.scaleLevels=parseInt($("scaleLevels")?.value||5);
+    data.scaleLabels=[...document.querySelectorAll("#scaleLabels input")].map(x=>x.value.trim()).filter(Boolean);
+  }
+  if(type==="yesno") data.yesnoExtra=$("yesnoExtra")?.value||"No sabe / No aplica";
+  if(type==="composite") data.compositeFields=[...document.querySelectorAll("#compositeFields .option-row")].map(r=>({
+    label:r.querySelector(".composite-label")?.value.trim()||"",
+    type:r.querySelector(".composite-type")?.value||"short"
+  })).filter(f=>f.label);
+  if(type==="conditional"){
+    data.parentQuestion=$("parentQuestion")?.value||"";
+    data.triggerValue=$("triggerValue")?.value.trim()||"Sí";
+    data.conditionalAnswerType=$("conditionalAnswerType")?.value||"text";
+  }
+  return data;
+}
+function clearBuilder(){
+  editingId=null;sectionEl.value="";topicEl.value="Identificación";$("questionText").value="";typeEl.value="text";
+  $("instructions").value="";$("required").checked=false;$("methodStatus").value="keep";$("notes").value="";
+  configForType("text");$("addQuestion").textContent="+ Agregar pregunta";
+}
+function fillBuilder(q){
+  editingId=q.id;renderSections();sectionEl.value=q.sectionId||"";topicEl.value=q.topic;$("questionText").value=q.question;typeEl.value=q.responseType;
+  $("instructions").value=q.instructions||"";$("required").checked=!!q.required;$("methodStatus").value=q.methodStatus||"keep";$("notes").value=q.notes||"";
+  configForType(q.responseType,q);
+  $("addQuestion").textContent="Guardar cambios";
+  window.scrollTo({top:document.querySelector(".panel").offsetTop-80,behavior:"smooth"});
+}
+function collectQuestion(){
+  const text=$("questionText").value.trim();
+  if(!text){toast("Escribe una pregunta antes de agregarla.");$("questionText").focus();return null}
+  const q={id:editingId||uid(),sectionId:sectionEl.value||"",topic:topicEl.value,question:text,responseType:typeEl.value,
+    instructions:$("instructions").value.trim(),required:$("required").checked,methodStatus:$("methodStatus").value,
+    notes:$("notes").value.trim(),...readDynamic()};
+  if(["single","multiple"].includes(q.responseType)){
+    if(!q.options?.length){toast("Agrega al menos una opción de respuesta.");return null}
+  }
+  if(q.responseType==="composite" && !q.compositeFields?.length){
+    toast("Agrega al menos un campo a la pregunta compuesta."); return null;
+  }
+  if(q.responseType==="conditional" && !q.parentQuestion){
+    toast("Selecciona la pregunta de la que dependerá esta pregunta."); return null;
+  }
+  return q;
+}
+function addQuestion(){
+  const q=collectQuestion();if(!q)return;
+  if(editingId){const i=questions.findIndex(x=>x.id===editingId);if(i>=0)questions[i]=q;toast("Pregunta actualizada.");}
+  else {questions.push(q);toast("Pregunta agregada al instrumento.");}
+  save();renderQuestions();clearBuilder();
+}
+function answerHtml(q){
+  const t=q.responseType;
+  if(t==="text") return '<textarea placeholder="Escribe tu respuesta..."></textarea>';
+  if(t==="short") return '<input placeholder="Escribe tu respuesta...">';
+  if(t==="numeric") return '<input type="number" placeholder="Ingresa un número">';
+  if(t==="year") return '<input type="number" min="1800" max="2200" placeholder="AAAA">';
+  if(t==="date") return '<input type="date">';
+  if(t==="yesno"){
+    const extra=q.yesnoExtra||"No sabe / No aplica";
+    return '<div class="radio-list"><label><input type="radio" name="q'+q.id+'" value="Sí"> Sí</label><label><input type="radio" name="q'+q.id+'" value="No"> No</label><label><input type="radio" name="q'+q.id+'" value="'+escapeHtml(extra)+'"> '+escapeHtml(extra)+'</label></div>';
+  }
+  if(t==="single") return '<div class="radio-list">'+(q.options||[]).map(o=>'<label><input type="radio" name="q'+q.id+'" value="'+escapeHtml(o)+'"> '+escapeHtml(o)+'</label>').join("")+'</div>';
+  if(t==="multiple") return '<div class="check-list">'+(q.options||[]).map(o=>'<label><input type="checkbox" name="q'+q.id+'" value="'+escapeHtml(o)+'"> '+escapeHtml(o)+'</label>').join("")+'</div>';
+  if(t==="composite") {
+    return '<div class="grid two">'+(q.compositeFields||[]).map(f=>{
+      const field = typeof f === "string" ? {label:f,type:"short"} : (f || {});
+      let input = '<input placeholder="Escribe tu respuesta...">';
+      if(field.type === "numeric") input = '<input type="number" placeholder="Ingresa un número">';
+      if(field.type === "year") input = '<input type="number" min="1800" max="2200" placeholder="AAAA">';
+      if(field.type === "date") input = '<input type="date">';
+      return '<div class="field"><label>'+escapeHtml(field.label||"Campo")+'</label>'+input+'</div>';
+    }).join("")+'</div>';
+  }
+  if(t==="scale") return '<div class="scale-row">'+(q.scaleLabels||[]).map((o,i)=>'<div class="scale-item"><strong>'+(i+1)+'</strong> '+escapeHtml(o)+'</div>').join("")+'</div>';
+  if(t==="conditional"){
+    const at=q.conditionalAnswerType||"text";
+    if(at==="short") return '<input placeholder="Escribe tu respuesta...">';
+    if(at==="numeric") return '<input type="number" placeholder="Ingresa un número">';
+    if(at==="year") return '<input type="number" min="1800" max="2200" placeholder="AAAA">';
+    return '<textarea placeholder="Escribe tu respuesta..."></textarea>';
+  }
+  return "";
+}
+function renderQuestions(){
+  $("questionCount").textContent=questions.length+(questions.length===1?" pregunta":" preguntas");
+  $("listTitle").textContent=$("instrumentName").value||"Instrumento sin título";
+  const list=$("questionList");
+  if(!questions.length){
+    list.innerHTML='<div class="empty"><strong>Aún no hay preguntas.</strong>Agrega tu primera pregunta arriba y aparecerá aquí.</div>';
+    return;
+  }
+  list.innerHTML=questions.map((q,i)=>`
+    <article class="question-card" data-id="${q.id}">
+      <div class="q-main">
+        <div class="q-top">
+          <div class="drag" title="Arrastra para reordenar">⠿</div>
+          <div class="q-number">${String(i+1).padStart(2,"0")}</div>
+          <div class="q-meta">
+            <div class="q-topic">${escapeHtml((sections.find(s=>s.id===q.sectionId)||{}).name||q.topic)}</div>
+            <div class="q-text">${escapeHtml(q.question)}</div>
+            <div class="badges">
+              <span class="badge green">${escapeHtml(types[q.responseType])}</span>
+              ${q.required?'<span class="badge">Obligatoria</span>':''}
+              ${q.methodStatus&&q.methodStatus!=="keep"?'<span class="badge">'+escapeHtml(methodStatusLabels[q.methodStatus]||q.methodStatus)+'</span>':''}
+            </div>
+          </div>
+          <div class="q-actions">
+            <button onclick="toggleDetails('${q.id}')">Ver</button>
+            <button onclick="editQuestion('${q.id}')">Editar</button>
+            <button onclick="duplicateQuestion('${q.id}')">Duplicar</button>
+            <button onclick="deleteQuestion('${q.id}')" class="danger">Eliminar</button>
+          </div>
+        </div>
+      </div>
+      <div class="q-details" id="details-${q.id}">
+        ${q.instructions?'<div><strong>Instrucciones:</strong> '+escapeHtml(q.instructions)+'</div>':''}
+        ${q.notes?'<div style="margin-top:7px"><strong>Observación metodológica:</strong> '+escapeHtml(q.notes)+'</div>':''}
+        <div class="preview-answer">${answerHtml(q)}</div>
+      </div>
+    </article>
+  `).join("");
+}
+window.toggleFollowup=(id,value)=>{
+  const q=questions.find(x=>x.id===id), el=$("followup-"+id);
+  if(q&&el)el.style.display=value===q.conditionValue?"block":"none";
+};
+document.addEventListener("change", e=>{
+  if(e.target && e.target.name && e.target.name.startsWith("cond")){
+    const id=e.target.name.slice(4);
+    toggleFollowup(id,e.target.value);
+  }
+});
+window.toggleDetails=id=>document.querySelector('[data-id="'+id+'"]').classList.toggle("open");
+window.editQuestion=id=>{const q=questions.find(x=>x.id===id);if(q)fillBuilder(q)};
+window.duplicateQuestion=id=>{const q=questions.find(x=>x.id===id);if(!q)return;questions.splice(questions.indexOf(q)+1,0,{...JSON.parse(JSON.stringify(q)),id:uid()});save();renderQuestions();toast("Pregunta duplicada.")};
+window.deleteQuestion=id=>{if(!confirm("¿Eliminar esta pregunta del instrumento?"))return;questions=questions.filter(q=>q.id!==id);save();renderQuestions();toast("Pregunta eliminada.")};
+
+typeEl.addEventListener("change",()=>configForType(typeEl.value));
+$("addQuestion").onclick=addQuestion;
+$("clearBuilder").onclick=clearBuilder;
+$("clearInstrumentBtn").onclick=clearInstrument;
+["instrumentName","instrumentVersion","instrumentDescription"].forEach(id=>$(id).addEventListener("input",()=>{save();renderQuestions()}));
+
+function clearInstrument(){
+  const ok=confirm("¿Quieres limpiar el instrumento completo? Se eliminarán todas las preguntas, secciones y versiones guardadas, y se restablecerán los datos básicos. Esta acción no se puede deshacer.");
+  if(!ok)return;
+
+  questions=[];
+  sections=[];
+  versionHistory=[];
+  editingId=null;
+
+  localStorage.removeItem("toolBasketQuestions");
+  localStorage.removeItem("toolBasketSections");
+  localStorage.removeItem("toolBasketMeta");
+  localStorage.removeItem("toolBasketHistory");
+
+  $("instrumentName").value="Instrumento de Caracterización Organizativa";
+  $("instrumentVersion").value="1.0";
+  $("instrumentDescription").value="Herramienta para recopilar información estructurada que apoye el fortalecimiento organizativo y la reflexión colectiva.";
+
+  $("newSectionName").value="";
+  renderSections();
+  clearBuilder();
+  renderQuestions();
+
+  $("saveStatus").innerHTML="Borrador · <span>Listo para comenzar</span>";
+  toast("Instrumento completamente limpiado.");
+}
+function previewMarkup(){
+  const name=escapeHtml($("instrumentName").value||"Instrumento sin título");
+  const desc=escapeHtml($("instrumentDescription").value||"");
+  let html='<div class="doc-title">'+name+'</div><div class="doc-sub">'+desc+' · Version '+escapeHtml($("instrumentVersion").value||"1.0")+'</div>';
+  let last="";
+  questions.forEach((q,i)=>{
+    const group=(sections.find(s=>s.id===q.sectionId)||{}).name||q.topic;
+    if(group!==last){html+='<div class="preview-section"><h3>'+escapeHtml(group)+'</h3></div>';last=group}
+    const isConditional=q.responseType==="conditional";
+    const parent=questions.find(x=>x.id===q.parentQuestion);
+    const conditionText=isConditional
+      ? '<div class="helper conditional-note">Esta pregunta se mostrará cuando <strong>'+escapeHtml(parent?.question||"la pregunta vinculada")+'</strong> tenga como respuesta: <strong>'+escapeHtml(q.triggerValue||"Sí")+'</strong>.</div>'
+      : "";
+    html+='<div class="preview-question" data-preview-q="'+escapeHtml(q.id)+'"'+(isConditional?' style="display:none"':'')+'><strong>'+String(i+1).padStart(2,"0")+'. '+escapeHtml(q.question)+'</strong>';
+    if(q.instructions)html+='<div class="helper">'+escapeHtml(q.instructions)+'</div>';
+    html+=conditionText;
+    html+='<div class="preview-answer" data-preview-answer="'+escapeHtml(q.id)+'">'+answerHtml(q)+'</div>';
+    if(q.responseType==="text" || (q.responseType==="conditional" && (q.conditionalAnswerType||"text")==="text")){
+      html+='<div class="preview-lines"><div class="preview-line"></div><div class="preview-line"></div><div class="preview-line"></div></div>';
+    }
+    html+='</div>';
+  });
+  if(!questions.length)html+='<div class="empty">Aún no se han agregado preguntas.</div>';
+  return html;
+}
+function bindConditionalPreview(){
+  const root=$("previewContent");
+  questions.filter(q=>q.responseType==="conditional" && q.parentQuestion).forEach(q=>{
+    const parentCard=root.querySelector('[data-preview-q="'+CSS.escape(q.parentQuestion)+'"]');
+    const childCard=root.querySelector('[data-preview-q="'+CSS.escape(q.id)+'"]');
+    if(!parentCard || !childCard)return;
+
+    const controls=parentCard.querySelectorAll("input, textarea, select");
+    const update=()=>{
+      const checked=[...parentCard.querySelectorAll('input:checked')].map(x=>x.value);
+      const field=parentCard.querySelector("textarea, input:not([type=radio]):not([type=checkbox]), select");
+      const values=checked.length?checked:(field ? [field.value] : []);
+      const trigger=String(q.triggerValue||"Sí").trim().toLowerCase();
+      const matches=values.some(v=>String(v||"").trim().toLowerCase()===trigger);
+      childCard.style.display=matches?"block":"none";
+    };
+    controls.forEach(el=>el.addEventListener("input",update));
+    controls.forEach(el=>el.addEventListener("change",update));
+    update();
+  });
+}
+$("previewBtn").onclick=()=>{$("previewContent").innerHTML=previewMarkup();$("previewModal").classList.add("show");bindConditionalPreview()};
+$("closePreview").onclick=()=>$("previewModal").classList.remove("show");
+$("previewModal").onclick=e=>{if(e.target.id==="previewModal")$("previewModal").classList.remove("show")};
+
+$("printBtn").onclick=()=>{
+  $("previewContent").innerHTML=previewMarkup();
+  $("previewModal").classList.add("show");
+  bindConditionalPreview();
+  setTimeout(()=>window.print(),250);
+};
+
+$("exportJsonBtn").onclick=()=>{
+  const data={metadata:{name:$("instrumentName").value,version:$("instrumentVersion").value,description:$("instrumentDescription").value},sections,questions,history:versionHistory};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="instrument-project.json";a.click();URL.revokeObjectURL(a.href);
+  toast("Proyecto exportado.");
+};
+
+function coverageMarkup(){
+  const groups=sections.length?sections.map(s=>({name:s.name,count:questions.filter(q=>q.sectionId===s.id && q.methodStatus!=="exclude").length})):topics.map(t=>({name:t,count:questions.filter(q=>q.topic===t && q.methodStatus!=="exclude").length})).filter(x=>x.count);
+  const active=questions.filter(q=>q.methodStatus!=="exclude");
+  const avg=groups.length?Math.round(active.length/groups.length):0;
+  let html='<div class="coverage-grid">';
+  groups.forEach(g=>{const level=g.count===0?"Sin preguntas":g.count<Math.max(2,avg)?"Baja":g.count===avg?"Media":"Alta";html+=`<div class="coverage-card"><strong>${g.count}</strong><b>${escapeHtml(g.name)}</b><div class="helper">Cobertura: ${level}</div></div>`});
+  html+='</div>';
+  html+=`<div class="helper" style="margin-top:20px">Preguntas activas: ${active.length} · Excluidas: ${questions.length-active.length} · Secciones/dimensiones con preguntas: ${groups.length}</div>`;
+  if(!questions.length)html='<div class="empty"><strong>No hay preguntas para analizar.</strong>Agrega preguntas y vuelve a revisar la cobertura.</div>';
+  return html;
+}
+function showCoverage(){$("coverageContent").innerHTML=coverageMarkup();$("coverageModal").classList.add("show")}
+function showHistory(){
+  const list=$("historyContent");
+  list.innerHTML=versionHistory.length?versionHistory.map((v,i)=>`<div class="history-item"><strong>Versión ${escapeHtml(v.version||"sin versión")}</strong><div class="helper">${new Date(v.date).toLocaleString()} · ${v.questions.length} preguntas · ${v.sections.length} secciones</div><button type="button" class="secondary" style="margin-top:8px" onclick="restoreHistory(${i})">Restaurar esta versión</button></div>`).join(""):'<div class="empty">Todavía no hay versiones guardadas.</div>';
+  $("historyModal").classList.add("show");
+}
+window.restoreHistory=i=>{const v=versionHistory[i];if(!v)return;if(!confirm("¿Restaurar esta versión? El diseño actual será reemplazado."))return;questions=JSON.parse(JSON.stringify(v.questions));sections=JSON.parse(JSON.stringify(v.sections));$("instrumentVersion").value=v.version||"1.0";renderSections();save(false);renderQuestions();$("historyModal").classList.remove("show");toast("Versión restaurada.")};
+function exportExcel(){
+  if(!window.XLSX){toast("No se pudo cargar el exportador de Excel.");return}
+  const rows=questions.map((q,i)=>({ID:"Q"+String(i+1).padStart(2,"0"),Sección:(sections.find(s=>s.id===q.sectionId)||{}).name||"",Tema:q.topic,Pregunta:q.question,Tipo:types[q.responseType]||q.responseType,Obligatoria:q.required?"Sí":"No",Estado:methodStatusLabels[q.methodStatus]||q.methodStatus,Opciones:(q.options||[]).join(" | "),Instrucciones:q.instructions||"",Observaciones:q.notes||""}));
+  const dict=questions.map((q,i)=>({Variable:"Q"+String(i+1).padStart(2,"0"),Etiqueta:q.question,Sección:(sections.find(s=>s.id===q.sectionId)||{}).name||"",Tipo:q.responseType,Valores:(q.options||q.scaleLabels||[]).join(" | "),Obligatoria:q.required?"Sí":"No"}));
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),"Instrumento");XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(dict),"Diccionario");XLSX.writeFile(wb,(($("instrumentName").value||"instrumento").replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"")||"instrumento")+".xlsx");toast("Excel exportado con instrumento y diccionario.")
+}
+function importProject(file){
+  const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);if(!Array.isArray(data.questions))throw new Error("Formato inválido");questions=data.questions;sections=Array.isArray(data.sections)?data.sections:[];const m=data.metadata||{};$("instrumentName").value=m.name||"Instrumento de Caracterización Organizativa";$("instrumentVersion").value=m.version||"1.0";$("instrumentDescription").value=m.description||"";versionHistory=Array.isArray(data.history)?data.history:[];renderSections();renderQuestions();save(false);toast("Proyecto importado correctamente.")}catch(err){toast("No se pudo importar el proyecto. Revisa que sea un JSON de Tool Basket.")}};reader.readAsText(file)
+}
+
+$("coverageBtn").onclick=showCoverage;
+$("historyBtn").onclick=showHistory;
+$("excelBtn").onclick=exportExcel;
+$("importJsonInput").onchange=e=>{if(e.target.files[0])importProject(e.target.files[0]);e.target.value=""};
+$("closeCoverage").onclick=()=>$("coverageModal").classList.remove("show");
+$("closeHistory").onclick=()=>$("historyModal").classList.remove("show");
+$("coverageModal").onclick=e=>{if(e.target.id==="coverageModal")$("coverageModal").classList.remove("show")};
+$("historyModal").onclick=e=>{if(e.target.id==="historyModal")$("historyModal").classList.remove("show")};
+
+renderSections(); configForType("text"); renderQuestions();
+</script>
+</body>
+</html>

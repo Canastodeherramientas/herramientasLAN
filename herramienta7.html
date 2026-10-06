@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramienta 7 — Del Dato a la Acción</title>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#efeae2;color:#2f3932;font-family:'Titillium Web',sans-serif}
+body{padding:22px 12px 36px}
+.toolbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 auto 14px;max-width:1080px}
+.toolbar button{border:1px solid #d8d2c5;border-radius:8px;min-width:auto;padding:8px 15px;background:#fbfaf5;color:#35554a;font-family:'Titillium Web',sans-serif;font-weight:600;font-size:14px;letter-spacing:.1px;cursor:pointer;box-shadow:0 1px 4px rgba(25,55,45,.07);transition:background .2s,border-color .2s,color .2s,box-shadow .2s}
+.toolbar button:hover{background:#f2eee5;border-color:#bcb5a7;box-shadow:0 3px 8px rgba(25,55,45,.10)}
+.toolbar button:disabled{opacity:.65;cursor:wait}
+.tb-pdf{color:#176b4b;border-color:#b9d0c2}
+.tb-export,.tb-import{color:#4f675d;border-color:#c9c2b5}
+.tb-clear{color:#a6533d;border-color:#d8b3a8}
+.project-file{display:none}
+.hint{text-align:center;color:#777;font-size:12px;margin:-6px 0 12px}
+.sheet{width:min(1120px,calc(100% - 28px));max-width:1120px;margin:auto;background:#fffdf8;border:1px solid #e2d9ca;border-radius:18px;box-shadow:0 10px 34px rgba(67,52,31,.14);overflow:hidden}
+.top{padding:30px 42px 22px;text-align:center;border-bottom:1px solid #eadfce;background:#fffdf8}
+.kicker{display:inline-block;background:#245a43;color:#fff;border-radius:7px;padding:5px 22px;font-size:13px;font-weight:800;letter-spacing:1.8px}
+h1{margin:9px 0 5px;color:#174c39;font-size:36px;line-height:1.05;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.sub{max-width:650px;margin:0 auto;color:#5d655e;font-size:14px;line-height:1.45}
+.route{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:18px;flex-wrap:wrap}
+.route span{font-size:11px;font-weight:800;letter-spacing:.8px;padding:5px 11px;border-radius:20px}
+.r1{background:#e7f2e7;color:#286442}.r2{background:#faead9;color:#a65222}.r3{background:#eee5f4;color:#704181}.r4{background:#e5eff7;color:#236083}
+.arrow{color:#9b927f;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px 24px 18px}
+.card{position:relative;border:1.5px solid var(--bd);background:var(--bg);border-radius:16px;padding:18px 18px 20px;min-height:285px;overflow:hidden}
+.green{--bd:#9bc49f;--bg:#eef7ee;--tt:#28704a;--ln:#b8d5ba}
+.orange{--bd:#efbd8d;--bg:#fdf2e5;--tt:#b45825;--ln:#efcba9}
+.purple{--bd:#c7a7d5;--bg:#f4edf7;--tt:#754486;--ln:#d8c0df}
+.blue{--bd:#9abbd3;--bg:#edf4f9;--tt:#236b89;--ln:#bfd6e5}
+.stage{display:flex;align-items:flex-start;gap:11px;margin-bottom:10px}
+.num{width:32px;height:32px;border-radius:50%;background:var(--tt);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:800;flex:none}
+.card h2{margin:2px 0 0;color:var(--tt);font-size:17px;line-height:1.12;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.q{margin:0 0 15px 43px;color:#5f655f;font-size:12.5px;line-height:1.4;font-style:italic;max-width:390px}
+.lines{display:flex;flex-direction:column;gap:14px;margin-left:43px}
+.line{display:flex;align-items:flex-start;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--tt);margin-top:7px;flex:none}
+.write{flex:1;min-height:23px;border-bottom:1.5px solid var(--ln);outline:none;color:#252b27;font-size:13px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.write:focus{border-bottom-color:var(--tt);background:rgba(255,255,255,.35)}
+.decisions{margin:4px 24px 22px;background:#f8eee0;border:1.5px solid #d9b895;border-radius:16px;padding:18px}
+.dec-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.dec-icon{width:43px;height:43px;border-radius:50%;background:#fff;border:2px solid #b55c2c;display:grid;place-items:center;color:#b55c2c;font-size:20px;font-weight:800;flex:none}
+.dec-head h2{margin:0;color:#8e4523;font-size:19px;letter-spacing:.7px;text-transform:uppercase}
+.dec-head p{margin:2px 0 0;color:#6d563e;font-size:12px;line-height:1.35}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{background:#b45e2c;color:#fff;font-size:13px;font-weight:800;letter-spacing:.8px;padding:9px 8px;border:1px solid #995023;text-align:left}
+th:first-child{width:42px;background:#f8eee0;border-color:#d9b895}
+th:nth-child(2){width:29%}th:nth-child(3){width:25%}th:nth-child(4){width:18%}th:nth-child(5){width:21%}
+td{border:1px solid #d9b895;background:#fffdf8;min-height:48px;height:48px;padding:8px 9px;vertical-align:top;outline:none;font-size:13px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+td:focus{box-shadow:inset 0 0 0 2px #d8b28c}
+.add-action-wrap{display:flex;justify-content:flex-end;margin-top:12px}.add-action{border:1.5px solid #287348;background:#fff;color:#287348;border-radius:999px;padding:8px 15px;font:700 12.5px 'Titillium Web';cursor:pointer;transition:.18s}.add-action:hover{background:#287348;color:#fff;transform:translateY(-1px)}
+.numcell{text-align:center!important;background:#f8eee0!important;padding-top:12px!important}
+.rownum{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:50%;background:#b85a29;color:#fff;font-size:12px;font-weight:800}
+.message{margin:0 24px 24px;background:#edf5e8;border:1.4px solid #bfd5ae;border-radius:13px;padding:12px 16px;text-align:center}
+.message strong{display:inline-block;background:#287348;color:#fff;border-radius:5px;padding:3px 13px;font-size:12px;letter-spacing:1px}
+.message p{margin:7px 0 0;color:#52684d;font-size:12px;font-style:italic}
+
+.priority-list{display:grid;gap:9px;margin-left:43px}.priority-row{display:grid;grid-template-columns:30px minmax(0,1fr) 135px 28px;gap:8px;align-items:center}.priority-tag{width:28px;height:28px;border-radius:50%;background:var(--tt);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800}.priority-write{min-height:30px;border-bottom:1.5px solid var(--ln);outline:none;font-size:13px;line-height:1.35;padding:4px 3px}.priority-write:focus{border-bottom-color:var(--tt);background:rgba(255,255,255,.35)}.priority-row .remove-priority{border:0;background:transparent;color:#a14d2b;font:700 15px 'Titillium Web';cursor:pointer;padding:2px 4px}.priority-row .remove-priority:hover{color:#7f3218}.priority-row select{width:100%;border:1px solid var(--ln);border-radius:8px;background:#fffdf8;color:#4e5650;padding:6px 7px;font:600 11px 'Titillium Web';outline:none}.priority-help{margin:10px 0 0 43px;color:#6b706b;font-size:11px;font-style:italic}.decisions table{table-layout:fixed}.decisions th:nth-child(2){width:22%}.decisions th:nth-child(3){width:19%}.decisions th:nth-child(4){width:15%}.decisions th:nth-child(5){width:13%}.decisions th:nth-child(6){width:23%}.result-head{margin:16px 0 8px;color:#8e4523;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}.action-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.summary-item{background:#fffdf8;border:1px solid #dec8ad;border-radius:9px;padding:8px 5px;text-align:center}.summary-item b{display:block;font-size:18px;color:#8e4523;line-height:1}.summary-item span{display:block;margin-top:4px;color:#6d563e;font-size:10px;line-height:1.1}.commitment{margin:14px 0 0;background:#fffdf8;border:1.5px solid #d9b895;border-radius:11px;padding:11px 13px}.commitment-label{color:#8e4523;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.7px}.commitment-q{margin:2px 0 6px;color:#6d563e;font-size:11px}.commitment-write{min-height:30px;border-bottom:1.5px solid #d9b895;outline:none;font-size:13px;padding:4px}.commitment-write:focus{border-bottom-color:#8e4523;background:#fffaf3}.remove-action{border:0;background:transparent;color:#a14d2b;font:700 15px 'Titillium Web';cursor:pointer;padding:2px 5px}.remove-action:hover{color:#7f3218}.decisions th:first-child{width:36px}.decisions th:nth-child(7){width:34px}.decisions td.remove-cell{width:34px;text-align:center;background:#fffaf3}.decisions th:nth-child(2){width:20%}.decisions th:nth-child(3){width:17%}.decisions th:nth-child(4){width:13%}.decisions th:nth-child(5){width:11%}.decisions th:nth-child(6){width:25%}
+@media(max-width:720px){
+ body{padding:12px 8px 24px}.top{padding:24px 20px 18px}h1{font-size:29px}.grid{grid-template-columns:1fr;padding:16px 14px}.card{min-height:250px}.decisions{margin:2px 14px 18px;padding:14px;overflow-x:auto}.decisions table{min-width:620px}.message{margin:0 14px 18px}
+}
+.pdf-exporting .add-action-wrap{display:none !important}
+.pdf-exporting .remove-priority,.pdf-exporting .remove-cell{display:none !important}
+.pdf-exporting .decisions th:nth-child(7){display:none !important}
+.pdf-exporting .decisions td.remove-cell{display:none !important}
+@media print{body{background:#fff;padding:0}.toolbar,.hint{display:none}.sheet{box-shadow:none;border:0;max-width:none;border-radius:0}.card{break-inside:avoid}.decisions{break-inside:avoid}.message{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+<button class="tb-pdf" onclick="exportPDFDesdeBoton(this)">PDF</button>
+<button class="tb-export" onclick="exportProject()">Exportar proyecto</button>
+<button class="tb-import" onclick="document.getElementById('projectFile').click()">Importar proyecto</button>
+<button class="tb-clear" onclick="limpiar()">Limpiar</button>
+<input class="project-file" id="projectFile" type="file" accept=".json,application/json" onchange="importProject(event)">
+</div>
+
+
+<div class="sheet" id="sheet6">
+<header class="top">
+  <span class="kicker">HERRAMIENTA 7</span>
+  <h1>Del Dato a la Acción</h1>
+  <p class="sub">Transformamos los principales hallazgos del mapeo en prioridades y decisiones que fortalecen nuestro tejido organizativo.</p>
+  <div class="route" aria-label="Ruta de trabajo">
+    <span class="r1">FORTALEZAS</span><i class="arrow">→</i>
+    <span class="r2">FORTALECER</span><i class="arrow">→</i>
+    <span class="r3">ARTICULAR</span><i class="arrow">→</i>
+    <span class="r4">PRIORIZAR</span>
+  </div>
+</header>
+
+<main class="grid">
+<section class="card green">
+  <div class="stage"><span class="num">1</span><h2>Lo que hacemos bien</h2></div>
+  <p class="q">¿Cuáles son nuestras principales fortalezas y capacidades?</p>
+  <div class="lines">
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+  </div>
+</section>
+<section class="card orange">
+  <div class="stage"><span class="num">2</span><h2>Lo que necesitamos fortalecer</h2></div>
+  <p class="q">¿Qué áreas o temas requieren mayor atención o apoyo?</p>
+  <div class="lines">
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+  </div>
+</section>
+<section class="card purple">
+  <div class="stage"><span class="num">3</span><h2>Oportunidades para trabajar juntos</h2></div>
+  <p class="q">¿Qué oportunidades encontramos para articularnos, compartir y crecer como red?</p>
+  <div class="lines">
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+    <div class="line"><span class="dot"></span><div class="write" contenteditable="true"></div></div>
+  </div>
+</section>
+<section class="card blue">
+  <div class="stage"><span class="num">4</span><h2>Prioridades para los próximos meses</h2></div>
+  <p class="q">¿Cuáles son nuestros tres temas o acciones prioritarias a corto plazo?</p>
+  <div class="priority-list">
+    <div class="priority-row"><span class="priority-tag">1</span><div class="priority-write" contenteditable="true"></div><select aria-label="Horizonte de la prioridad 1"><option>Ahora · 0–3 meses</option><option>Próximamente · 3–6 meses</option><option>Más adelante · 6–12 meses</option></select><button type="button" class="remove-priority" onclick="removePriority(this)" aria-label="Eliminar prioridad">×</button></div>
+    <div class="priority-row"><span class="priority-tag">2</span><div class="priority-write" contenteditable="true"></div><select aria-label="Horizonte de la prioridad 2"><option>Ahora · 0–3 meses</option><option>Próximamente · 3–6 meses</option><option>Más adelante · 6–12 meses</option></select><button type="button" class="remove-priority" onclick="removePriority(this)" aria-label="Eliminar prioridad">×</button></div>
+    <div class="priority-row"><span class="priority-tag">3</span><div class="priority-write" contenteditable="true"></div><select aria-label="Horizonte de la prioridad 3"><option>Ahora · 0–3 meses</option><option>Próximamente · 3–6 meses</option><option>Más adelante · 6–12 meses</option></select><button type="button" class="remove-priority" onclick="removePriority(this)" aria-label="Eliminar prioridad">×</button></div>
+  </div>
+  <p class="priority-help">Seleccionemos solo aquello que realmente queremos convertir en acción.</p>
+  <div class="priority-actions"><button type="button" class="add-action" onclick="addPriority()">＋ Añadir prioridad</button></div>
+</section>
+</main>
+
+<section class="decisions">
+  <div class="dec-head">
+    <div class="dec-icon">5</div>
+    <div><h2>Nuestras decisiones</h2><p>Transformemos nuestras prioridades en acciones concretas: qué haremos, para qué, quién, cuándo y cómo sabremos que avanzamos.</p></div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>¿QUÉ HAREMOS?</th><th>¿PARA QUÉ?</th><th>RESPONSABLE</th><th>¿CUÁNDO?</th><th>¿CÓMO SABREMOS QUE AVANZAMOS?</th><th></th></tr></thead>
+    <tbody>
+      <tr><td class="numcell"><span class="rownum">1</span></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="remove-cell"><button type="button" class="remove-action" onclick="removeAction(this)" aria-label="Eliminar acción">×</button></td></tr>
+      <tr><td class="numcell"><span class="rownum">2</span></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="remove-cell"><button type="button" class="remove-action" onclick="removeAction(this)" aria-label="Eliminar acción">×</button></td></tr>
+      <tr><td class="numcell"><span class="rownum">3</span></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="remove-cell"><button type="button" class="remove-action" onclick="removeAction(this)" aria-label="Eliminar acción">×</button></td></tr>
+    </tbody>
+  </table>
+  <div class="add-action-wrap"><button type="button" class="add-action" onclick="addAction()">＋ Añadir acción</button></div>
+  <div class="result-head">Nuestro plan en síntesis</div>
+  <div class="action-summary">
+    <div class="summary-item"><b id="sum-actions">0</b><span>acciones definidas</span></div>
+    <div class="summary-item"><b id="sum-purpose">0</b><span>con propósito</span></div>
+    <div class="summary-item"><b id="sum-responsible">0</b><span>con responsable</span></div>
+    <div class="summary-item"><b id="sum-when">0</b><span>con fecha</span></div>
+    <div class="summary-item"><b id="sum-result">0</b><span>con resultado esperado</span></div>
+  </div>
+  <div class="commitment">
+    <div class="commitment-label">Nuestro compromiso colectivo</div>
+    <div class="commitment-q">¿Cuál es el primer paso que estamos dispuestos a dar?</div>
+    <div class="commitment-write" contenteditable="true"></div>
+  </div>
+</section>
+
+
+</div>
+
+<script>
+function updateSummary(){
+  const rows=[...document.querySelectorAll('#sheet6 .decisions tbody tr')];
+  const values=rows.map(r=>[...r.querySelectorAll('td[contenteditable="true"]')].map(td=>td.innerText.trim()));
+  const count=i=>values.filter(v=>v[i]).length;
+  document.getElementById('sum-actions').textContent=values.filter(v=>v.some(Boolean)).length;
+  document.getElementById('sum-purpose').textContent=count(1);
+  document.getElementById('sum-responsible').textContent=count(2);
+  document.getElementById('sum-when').textContent=count(3);
+  document.getElementById('sum-result').textContent=count(4);
+}
+function renumberPriorities(){
+  document.querySelectorAll('#sheet6 .priority-row').forEach((row,i)=>{
+    const tag=row.querySelector('.priority-tag');
+    if(tag)tag.textContent=i+1;
+    const select=row.querySelector('select');
+    if(select)select.setAttribute('aria-label','Horizonte de la prioridad '+(i+1));
+  });
+}
+function addPriority(){
+  const list=document.querySelector('#sheet6 .priority-list');
+  if(!list)return;
+  const next=list.querySelectorAll('.priority-row').length+1;
+  const row=document.createElement('div');
+  row.className='priority-row';
+  row.innerHTML='<span class="priority-tag">'+next+'</span><div class="priority-write" contenteditable="true"></div><select aria-label="Horizonte de la prioridad '+next+'"><option>Ahora · 0–3 meses</option><option>Próximamente · 3–6 meses</option><option>Más adelante · 6–12 meses</option></select><button type="button" class="remove-priority" onclick="removePriority(this)" aria-label="Eliminar prioridad">×</button>';
+  list.appendChild(row);
+  row.querySelector('.priority-write').focus();
+}
+function removePriority(btn){
+  const list=document.querySelector('#sheet6 .priority-list');
+  const row=btn.closest('.priority-row');
+  if(!list||!row)return;
+  if(list.querySelectorAll('.priority-row').length<=1){row.querySelector('.priority-write').innerHTML='';row.querySelector('select').selectedIndex=0;return;}
+  row.remove();
+  renumberPriorities();
+}
+function renumberActions(){
+  document.querySelectorAll('#sheet6 .decisions tbody tr').forEach((row,i)=>{
+    const n=row.querySelector('.rownum');
+    if(n)n.textContent=i+1;
+  });
+}
+function removeAction(btn){
+  const tbody=document.querySelector('#sheet6 .decisions tbody');
+  const row=btn.closest('tr');
+  if(!tbody||!row)return;
+  if(tbody.querySelectorAll('tr').length<=1){
+    row.querySelectorAll('td[contenteditable="true"]').forEach(td=>td.innerHTML='');
+  }else{
+    row.remove();
+    renumberActions();
+  }
+  updateSummary();
+}
+function exportProject(){
+  const data={
+    version:1,
+    tool:'Herramienta 7 · Del Dato a la Acción',
+    savedAt:new Date().toISOString(),
+    strengths:Array.from(document.querySelectorAll('#sheet6 .green .write')).map(el=>el.innerHTML),
+    strengthen:Array.from(document.querySelectorAll('#sheet6 .orange .write')).map(el=>el.innerHTML),
+    opportunities:Array.from(document.querySelectorAll('#sheet6 .purple .write')).map(el=>el.innerHTML),
+    priorities:Array.from(document.querySelectorAll('#sheet6 .priority-row')).map(row=>({text:row.querySelector('.priority-write')?.innerHTML||'',horizon:row.querySelector('select')?.value||''})),
+    actions:Array.from(document.querySelectorAll('#sheet6 .decisions tbody tr')).map(row=>Array.from(row.querySelectorAll('td[contenteditable="true"]')).map(td=>td.innerHTML)),
+    commitment:document.querySelector('#sheet6 .commitment-write')?.innerHTML||''
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='Herramienta 7 - Del Dato a la Acción_proyecto.json';
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+function importProject(event){
+  const file=event.target.files&&event.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data||(!Array.isArray(data.priorities)&&!Array.isArray(data.actions)&&!Array.isArray(data.editable)&&!Array.isArray(data.content))) throw new Error('El archivo no tiene el formato de proyecto esperado.');
+      if(Array.isArray(data.strengths)) document.querySelectorAll('#sheet6 .green .write').forEach((el,i)=>el.innerHTML=data.strengths[i]||'');
+      if(Array.isArray(data.strengthen)) document.querySelectorAll('#sheet6 .orange .write').forEach((el,i)=>el.innerHTML=data.strengthen[i]||'');
+      if(Array.isArray(data.opportunities)) document.querySelectorAll('#sheet6 .purple .write').forEach((el,i)=>el.innerHTML=data.opportunities[i]||'');
+      if(Array.isArray(data.priorities)){
+        const list=document.querySelector('#sheet6 .priority-list');
+        if(list){
+          list.innerHTML='';
+          data.priorities.forEach((item,i)=>{
+            const row=document.createElement('div'); row.className='priority-row';
+            row.innerHTML='<span class="priority-tag">'+(i+1)+'</span><div class="priority-write" contenteditable="true"></div><select aria-label="Horizonte de la prioridad '+(i+1)+'"><option>Ahora · 0–3 meses</option><option>Próximamente · 3–6 meses</option><option>Más adelante · 6–12 meses</option></select><button type="button" class="remove-priority" onclick="removePriority(this)" aria-label="Eliminar prioridad">×</button>';
+            list.appendChild(row); row.querySelector('.priority-write').innerHTML=item.text||'';
+            if(item.horizon) row.querySelector('select').value=item.horizon;
+          });
+          if(!data.priorities.length) addPriority();
+        }
+      }
+      if(Array.isArray(data.actions)){
+        const tbody=document.querySelector('#sheet6 .decisions tbody');
+        if(tbody){
+          tbody.innerHTML='';
+          data.actions.forEach((cells,i)=>{
+            const tr=document.createElement('tr');
+            tr.innerHTML='<td class="numcell"><span class="rownum">'+(i+1)+'</span></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="remove-cell"><button type="button" class="remove-action" onclick="removeAction(this)" aria-label="Eliminar acción">×</button></td>';
+            tbody.appendChild(tr); tr.querySelectorAll('td[contenteditable="true"]').forEach((td,j)=>td.innerHTML=cells[j]||'');
+          });
+          if(!data.actions.length) addAction();
+        }
+      }
+      if(typeof data.commitment==='string'){const el=document.querySelector('#sheet6 .commitment-write'); if(el)el.innerHTML=data.commitment;}
+      if(!Array.isArray(data.priorities)&&!Array.isArray(data.actions)){
+        const editable=document.querySelectorAll('#sheet6 [contenteditable="true"]');
+        const savedEditable=Array.isArray(data.editable)?data.editable:data.content;
+        (savedEditable||[]).forEach(item=>{if(Number.isInteger(item.index)&&editable[item.index])editable[item.index].innerHTML=item.html||'';});
+      }
+      renumberPriorities(); renumberActions(); updateSummary(); alert('Proyecto importado correctamente.');
+    }catch(err){alert('No fue posible importar el proyecto: '+err.message);}
+    finally{event.target.value='';}
+  };
+  reader.readAsText(file);
+}
+
+function limpiar(){
+  document.querySelectorAll('#sheet6 [contenteditable="true"]').forEach(el=>el.innerHTML='');
+  document.querySelectorAll('#sheet6 select').forEach(el=>el.selectedIndex=0);
+  const priorityList=document.querySelector('#sheet6 .priority-list');
+  if(priorityList){
+    [...priorityList.querySelectorAll('.priority-row')].slice(3).forEach(row=>row.remove());
+    priorityList.querySelectorAll('.priority-row').forEach((row,i)=>{
+      row.querySelector('.priority-write').innerHTML='';
+      row.querySelector('select').selectedIndex=0;
+      row.querySelector('.priority-tag').textContent=i+1;
+    });
+  }
+  const tbody=document.querySelector('#sheet6 .decisions tbody');
+  if(tbody){
+    [...tbody.querySelectorAll('tr')].slice(3).forEach(row=>row.remove());
+    tbody.querySelectorAll('tr').forEach((row,i)=>{
+      row.querySelectorAll('td[contenteditable="true"]').forEach(td=>td.innerHTML='');
+      row.querySelector('.rownum').textContent=i+1;
+    });
+  }
+  updateSummary();
+}
+function addAction(){
+  const tbody=document.querySelector('#sheet6 .decisions tbody');
+  if(!tbody)return;
+  const next=tbody.querySelectorAll('tr').length+1;
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td class="numcell"><span class="rownum"></span></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td class="remove-cell"><button type="button" class="remove-action" onclick="removeAction(this)" aria-label="Eliminar acción">×</button></td>';
+  tbody.appendChild(tr);
+  renumberActions();
+  tr.querySelector('td[contenteditable="true"]').focus();
+  updateSummary();
+}
+document.addEventListener('input',e=>{if(e.target.closest('#sheet6'))updateSummary();});
+updateSummary();
+function exportPDFDesdeBoton(btn){
+  const sheet=document.getElementById('sheet6');
+  if(!sheet){alert('No se encontró la herramienta.');return;}
+  btn.disabled=true;const old=btn.innerHTML;btn.innerHTML='Generando PDF…';
+  sheet.classList.add('pdf-exporting');
+  html2canvas(sheet,{scale:2,backgroundColor:'#fffdf8',logging:false,useCORS:true}).then(canvas=>{
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF('p','mm','a4');
+    const pageW=pdf.internal.pageSize.getWidth(),pageH=pdf.internal.pageSize.getHeight();
+    const margin=8, usableW=pageW-margin*2;
+    const pxPerPage=Math.floor(canvas.width*(pageH-margin*2)/usableW);
+    let y=0,page=0;
+    while(y<canvas.height){
+      const h=Math.min(pxPerPage,canvas.height-y);
+      const pageCanvas=document.createElement('canvas');pageCanvas.width=canvas.width;pageCanvas.height=h;
+      const ctx=pageCanvas.getContext('2d');ctx.fillStyle='#fffdf8';ctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
+      ctx.drawImage(canvas,0,y,canvas.width,h,0,0,canvas.width,h);
+      const img=pageCanvas.toDataURL('image/png');
+      if(page>0) pdf.addPage();
+      const drawH=h*usableW/canvas.width;
+      pdf.addImage(img,'PNG',margin,margin,usableW,drawH);
+      y+=h;page++;
+    }
+    pdf.save('Herramienta 7 - Del Dato a la Acción.pdf');
+  }).catch(err=>{console.error(err);alert('No fue posible generar el PDF.');})
+  .finally(()=>{sheet.classList.remove('pdf-exporting');btn.disabled=false;btn.innerHTML=old;});
+}
+</script>
+</body>
+</html>

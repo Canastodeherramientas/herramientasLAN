@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramienta 2 — Diseñando nuestras preguntas</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{background:#eee9df;color:#173b35;font-family:'Titillium Web',sans-serif;padding:28px 14px 42px}
+.toolbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 auto 14px;max-width:1080px}
+.toolbar button{border:1px solid #d8d2c5;border-radius:8px;min-width:auto;padding:8px 15px;background:#fbfaf5;color:#35554a;font-family:'Titillium Web',sans-serif;font-weight:600;font-size:14px;letter-spacing:.1px;cursor:pointer;box-shadow:0 1px 4px rgba(25,55,45,.07);transition:background .2s,border-color .2s,color .2s,box-shadow .2s}
+.toolbar button:hover{background:#f2eee5;border-color:#bcb5a7;box-shadow:0 3px 8px rgba(25,55,45,.10)}
+.toolbar button:disabled{opacity:.65;cursor:wait}
+.tb-back{color:#35554a;border-color:#c9c2b5}.tb-pdf{color:#176b4b;border-color:#b9d0c2}.tb-export,.tb-import{color:#4f675d;border-color:#c9c2b5}.tb-clear{color:#a6533d;border-color:#d8b3a8}.project-file{display:none}
+.row-created{padding-right:44px}
+.btn-eliminar-bloque{
+  position:absolute;
+  right:-48px;
+  top:50%;
+  transform:translateY(-50%);
+  width:24px;
+  height:24px;
+  padding:0;
+  margin:0;
+  border:0;
+  background:transparent;
+  color:#a6533d;
+  font-family:'Titillium Web',sans-serif;
+  font-size:23px;
+  font-weight:800;
+  line-height:24px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  box-shadow:none;
+  transition:color .2s,transform .2s;
+}
+.btn-eliminar-bloque:hover{color:#7f382b;transform:translateY(-50%) scale(1.08)}
+.hint{text-align:center;font-size:13px;color:#69716d;margin:-2px 0 15px;letter-spacing:.15px}
+.sheet{width:100%;max-width:1085px;margin:0 auto;background:#fbfaf5;border:1px solid #ded8cb;border-radius:14px;box-shadow:0 14px 40px rgba(40,53,47,.18);overflow:visible;position:relative}
+.sheet:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;overflow:hidden;background-image:radial-gradient(circle at 20% 15%,rgba(33,90,62,.035) 0 1px,transparent 1.5px),radial-gradient(circle at 80% 70%,rgba(178,116,39,.03) 0 1px,transparent 1.5px);background-size:18px 18px,22px 22px}
+header{position:relative;display:grid;grid-template-columns:1fr;align-items:center;min-height:165px;padding:25px 30px 18px;overflow:hidden;background:linear-gradient(180deg,#fffdf8 0%,#fbfaf5 100%)}
+.head-center{text-align:center;position:relative;z-index:3;padding-left:0;margin:0 auto;max-width:800px}.h-small{color:#c94c29;font-size:18px;line-height:1;font-weight:800;letter-spacing:3px;margin:0 0 3px}h1{color:#14583d;font-size:39px;line-height:.98;font-weight:800;letter-spacing:.1px;margin:0 0 8px}.pb-row{display:flex;align-items:center;justify-content:center;gap:10px;margin:4px 0 9px}.p-banner{background:#c94c29;color:#fff;border-radius:5px;padding:4px 22px;font-weight:800;font-size:13px;letter-spacing:1.5px}.arr{color:#c94c29;font-weight:800}.sub{max-width:720px;margin:0 auto;color:#42504a;font-size:14px;line-height:1.35}
+.t2wrap{overflow-x:visible;position:relative;z-index:2}.t2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-width:780px;border-top:1px solid #d9d3c7;border-left:1px solid #d9d3c7}
+.chead{min-height:128px;padding:16px 15px;display:flex;align-items:center;gap:11px;border-right:1px solid #d9d3c7;border-bottom:1px solid #d9d3c7}.cic{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}.cic svg{width:30px;height:30px}.cg{background:#eaf2e3}.co{background:#fce9d9}.cb{background:#e7eff8}.cg .cic{background:#32774a}.co .cic{background:#e96820}.cb .cic{background:#2475b7}.ct{margin:0 0 3px;font-size:13px;font-weight:800;color:#53615a;line-height:1.1}.cq{margin:0;font-size:15px;font-weight:700;line-height:1.15;color:#24443b}.cg .cq{color:#32774a}.co .cq{color:#e96820}.cb .cq{color:#2475b7}
+.row{min-height:88px;padding:10px 12px;overflow:visible;display:flex;align-items:flex-start;gap:9px;border-right:1px solid #d9d3c7;border-bottom:1px solid #d9d3c7;position:relative}.dot2{width:9px;height:9px;border-radius:50%;margin-top:7px;flex:none}.row.cg .dot2{background:#32774a}.row.co .dot2{background:#e96820}.row.cb .dot2{background:#2475b7}.cell{flex:1;min-height:65px;outline:none;background:rgba(255,255,255,.88);border:1px solid #d7d5cc;border-radius:10px;padding:8px 11px;font-size:14px;line-height:1.25;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word;box-shadow:inset 0 1px 2px rgba(40,55,49,.04)}.cell:focus{background:#fff;border-color:#739b84;box-shadow:0 0 0 3px rgba(50,119,74,.09)}
+.btn-agregar-pregunta{display:block;margin:16px auto 18px;padding:11px 27px;border:0;border-radius:999px;background:#2e5e2a;color:#fff;font-family:'Titillium Web',sans-serif;font-size:15px;font-weight:700;letter-spacing:.3px;cursor:pointer;box-shadow:0 4px 10px rgba(46,94,42,.22);transition:transform .15s,box-shadow .15s,background .15s;position:relative;z-index:3}.btn-agregar-pregunta:hover{background:#245021;transform:translateY(-1px);box-shadow:0 6px 14px rgba(46,94,42,.28)}.btn-agregar-pregunta:active{transform:translateY(0)}
+.t2band{height:18px;position:relative;z-index:2;background:linear-gradient(175deg,transparent 0 48%,#8fa85d 49% 67%,transparent 68%),linear-gradient(5deg,transparent 0 52%,#d88722 53% 68%,transparent 69%);background-size:100px 18px,120px 18px;background-repeat:repeat-x}
+@media(max-width:900px){body{padding:12px 6px 25px}header{padding:18px 16px 16px;min-height:0}.head-center{text-align:center}h1{font-size:31px}.sub{font-size:13px}.t2{min-width:780px}.toolbar button{min-width:130px}}
+@media(max-width:560px){.hint{font-size:12px}.sheet{border-radius:10px}}
+</style>
+</head>
+
+<body>
+
+<div class="toolbar">
+    <button class="tb-pdf" onclick="exportPDFDesdeBoton(this)">PDF</button>
+  <button class="tb-export" onclick="exportProject()">Exportar proyecto</button>
+  <button class="tb-import" onclick="document.getElementById('projectFile').click()">Importar proyecto</button>
+  <button class="tb-clear" onclick="limpiar('sheet2')">Limpiar</button>
+  <input class="project-file" id="projectFile" type="file" accept=".json,application/json" onchange="importProject(event)">
+</div>
+
+<div class="sheet" id="sheet2">
+
+<header>
+  <div class="head-center">
+    <p class="h-small">HERRAMIENTA 2.</p>
+    <h1>Diseñando nuestras preguntas</h1>
+    <div class="pb-row">
+      <span class="arr">➤</span>
+      <span class="p-banner">PLANTILLA DE TRABAJO</span>
+      <span class="arr">➤</span>
+    </div>
+    <p class="sub">Retomen el Lienzo de Necesidades de Información que desarrollaron en el paso anterior y comiencen a construir las preguntas que harán parte de su formulario.</p>
+  </div>
+</header>
+
+<div class="t2wrap">
+<div class="t2">
+
+  <div class="chead cg">
+    <div class="cic">
+      <svg fill="#fff" viewBox="0 0 40 40">
+        <circle cx="20" cy="11" r="5.5"/>
+        <path d="M20 18c-6 0-10 4.5-10 9h20c0-4.5-4-9-10-9z"/>
+        <circle cx="8.5" cy="14" r="4"/>
+        <path d="M8.5 19c-4 0-6.5 3-6.5 6h9c0-2.5-1-4.6-2.5-6z"/>
+        <circle cx="31.5" cy="14" r="4"/>
+        <path d="M31.5 19c-1.5 1.4-2.5 3.5-2.5 6h9c0-3-2.5-6-6.5-6z"/>
+      </svg>
+    </div>
+    <div>
+      <p class="ct">Si queremos…</p>
+      <p class="cq">¿Qué queremos comprender o resolver?</p>
+    </div>
+  </div>
+
+  <div class="chead co">
+    <div class="cic">
+      <svg fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2.6" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="12"/>
+        <path d="M16 16 c0-4 8-4 8 0 c0 3-4 3-4 6"/>
+        <circle cx="20" cy="26" fill="#fff" r="1.6"/>
+      </svg>
+    </div>
+    <div>
+      <p class="ct">Podemos preguntar…:</p>
+      <p class="cq">¿Qué pregunta nos ayudará a conocer esa información?</p>
+    </div>
+  </div>
+
+  <div class="chead cb">
+    <div class="cic">
+      <svg fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewBox="0 0 40 40">
+        <rect height="27" rx="3" width="20" x="10" y="7"/>
+        <rect height="5" rx="1.5" width="8" x="16" y="4"/>
+        <path d="M14 15 h12 M14 21 h12 M14 27 h8"/>
+      </svg>
+    </div>
+    <div>
+      <p class="ct">¿Cómo responderemos esta pregunta?</p>
+      <p class="cq">¿Qué tipo de respuesta es la más adecuada?</p>
+    </div>
+  </div>
+
+  <!-- 15 editable rows -->
+  <div class="row cg"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row co"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cb"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cg"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row co"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cb"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cg"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row co"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cb"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cg"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row co"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cb"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cg"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row co"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+  <div class="row cb"><span class="dot2"></span><div class="cell" contenteditable="true"></div></div>
+
+</div>
+</div>
+
+<button class="btn-agregar-pregunta" type="button" onclick="agregarPregunta()">＋ Añadir otra pregunta</button>
+
+</div>
+
+<script>
+function limpiar(id){
+  const root=document.getElementById(id);
+  if(!root) return;
+
+  const table=root.querySelector('.t2');
+  if(table){
+    const rows=table.querySelectorAll('.row');
+    rows.forEach((row,index)=>{
+      if(index>=15) row.remove();
+    });
+  }
+
+  root.querySelectorAll('[contenteditable="true"]').forEach(el=>el.innerHTML='');
+  root.querySelectorAll('input,textarea,select').forEach(el=>{
+    if(el.type==='checkbox'||el.type==='radio') el.checked=false;
+    else el.value='';
+  });
+}
+
+
+function agregarPregunta(){
+  const table=document.querySelector('#sheet2 .t2');
+  if(!table) return;
+
+  const group=document.createElement('div');
+  group.className='question-group';
+  group.style.display='contents';
+
+  const colors=['cg','co','cb'];
+  colors.forEach(color=>{
+    const row=document.createElement('div');
+    row.className='row '+color+' row-created';
+
+    const dot=document.createElement('span');
+    dot.className='dot2';
+
+    const cell=document.createElement('div');
+    cell.className='cell';
+    cell.contentEditable='true';
+    cell.setAttribute('aria-label','Nueva respuesta');
+
+    row.appendChild(dot);
+    row.appendChild(cell);
+    group.appendChild(row);
+  });
+
+  table.appendChild(group);
+
+  const rows=group.querySelectorAll('.row');
+  const remove=document.createElement('button');
+  remove.type='button';
+  remove.className='btn-eliminar-bloque';
+  remove.setAttribute('aria-label','Eliminar las tres celdas');
+  remove.title='Eliminar las tres celdas';
+  remove.textContent='×';
+  remove.onclick=function(){
+    group.remove();
+    remove.remove();
+  };
+
+  // Position the single control beside the middle row.
+  rows[2].appendChild(remove);
+}
+
+function exportProject(){
+  const root=document.getElementById('sheet2');
+  const cells=Array.from(root.querySelectorAll('[contenteditable="true"]')).map((el,index)=>({
+    index,
+    html:el.innerHTML
+  }));
+
+  const data={
+    version:1,
+    tool:'Herramienta 2 · Diseñando nuestras preguntas',
+    savedAt:new Date().toISOString(),
+    cells
+  };
+
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download='Herramienta2_Disenando_nuestras_preguntas_proyecto.json';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importProject(event){
+  const file=event.target.files && event.target.files[0];
+  if(!file) return;
+
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data || !Array.isArray(data.cells)){
+        throw new Error('El archivo no tiene el formato de proyecto esperado.');
+      }
+
+      const root=document.getElementById('sheet2');
+      const table=root.querySelector('.t2');
+      if(!table) throw new Error('No se encontró la tabla de preguntas.');
+
+      // Rebuild the exact number of question blocks saved in the project.
+      const targetCells=data.cells.length;
+      if(targetCells < 15 || (targetCells-15) % 3 !== 0){
+        throw new Error('El proyecto tiene una estructura de preguntas no válida.');
+      }
+
+      // Return to the 15 original cells, then recreate added blocks.
+      const rows=Array.from(table.querySelectorAll('.row'));
+      rows.slice(15).forEach(row=>row.remove());
+      const blocksToCreate=(targetCells-15)/3;
+      for(let i=0;i<blocksToCreate;i++) agregarPregunta();
+
+      const current=Array.from(root.querySelectorAll('[contenteditable="true"]'));
+      if(current.length !== targetCells){
+        throw new Error('No fue posible reconstruir todas las preguntas del proyecto.');
+      }
+
+      data.cells.forEach(item=>{
+        if(Number.isInteger(item.index) && current[item.index]){
+          current[item.index].innerHTML=item.html || '';
+        }
+      });
+
+      alert('Proyecto importado correctamente.');
+    }catch(err){
+      alert('No fue posible importar el proyecto: '+err.message);
+    }finally{
+      event.target.value='';
+    }
+  };
+  reader.readAsText(file);
+}
+
+async function exportPDFDesdeBoton(btn){
+  const el=document.getElementById('sheet2');
+  if(!el || typeof html2canvas==='undefined' || !window.jspdf) return;
+
+  const original=btn;
+  original.disabled=true;
+  const oldText=original.textContent;
+  original.textContent='Preparando PDF…';
+
+  try{
+    const canvas=await html2canvas(el,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#fbfaf5',
+      logging:false
+    });
+
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({
+      orientation:'landscape',
+      unit:'mm',
+      format:'a4'
+    });
+
+    const pageW=pdf.internal.pageSize.getWidth();
+    const pageH=pdf.internal.pageSize.getHeight();
+    const ratio=Math.min(pageW/canvas.width,pageH/canvas.height);
+    const w=canvas.width*ratio;
+    const h=canvas.height*ratio;
+    const x=(pageW-w)/2;
+    const y=(pageH-h)/2;
+
+    pdf.addImage(canvas.toDataURL('image/png'),'PNG',x,y,w,h);
+    pdf.save('Herramienta2_Preguntas.pdf');
+  }finally{
+    original.disabled=false;
+    original.textContent=oldText;
+  }
+}
+</script>
+
+</body>
+</html>
+
+<style>
+</style>
