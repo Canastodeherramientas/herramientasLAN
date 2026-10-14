@@ -4773,7 +4773,16 @@ function exportPDFDesdeBoton(btn){
     <section class="jamovi-videos">
       <div class="jv-block">
         <h2>8 · Video 1 · Conociendo Jamovi paso a paso</h2>
-        <video controls preload="metadata" src="jamovi1.1.mp4"></video>
+        <video controls preload="metadata">
+  <source src="jamovi1.1.mp4" type="video/mp4">
+  <track
+    src="jamovi1.1.vtt"
+    kind="subtitles"
+    srclang="en"
+    label="English"
+    default
+  >
+</video>
       </div>
       <div class="jv-block">
         <h2>9 · Video 2 · Analizando nuestra información</h2>
