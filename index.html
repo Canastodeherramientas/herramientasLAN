@@ -4786,7 +4786,16 @@ function exportPDFDesdeBoton(btn){
       </div>
       <div class="jv-block">
         <h2>9 · Video 2 · Analizando nuestra información</h2>
-        <video controls preload="metadata" src="jamovi2.mp4"></video>
+        <video controls preload="metadata">
+  <source src="jamovi2.mp4" type="video/mp4">
+  <track
+    src="jamovi2.vtt"
+    kind="subtitles"
+    srclang="en"
+    label="English"
+    default
+  >
+</video>
       </div>
     </section>
   </div>
