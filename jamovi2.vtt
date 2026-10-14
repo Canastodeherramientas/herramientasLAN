@@ -1,0 +1,461 @@
+﻿WEBVTT
+
+00:00:05.989 --> 00:00:08.690
+Welcome to the final phase of our data
+analysis in YAMOBI.
+
+00:00:09.690 --> 00:00:12.637
+Once we have saved our
+file, we will learn how to
+
+00:00:12.638 --> 00:00:15.230
+access it and generate
+our first statistical results.
+
+00:00:16.430 --> 00:00:17.430
+Step 1.
+
+00:00:17.785 --> 00:00:18.970
+Recover the saved file.
+
+00:00:20.135 --> 00:00:21.945
+When opening YAMOBI
+again, it is possible
+
+00:00:21.946 --> 00:00:23.746
+that the database does
+not appear immediately.
+
+00:00:24.470 --> 00:00:27.850
+To load it, go to the menu of the three
+lines on the upper left side.
+
+00:00:28.360 --> 00:00:30.830
+Select Open and look for your file.
+
+00:00:31.555 --> 00:00:33.395
+You can also find it quickly in the recent
+tab.
+
+00:00:34.779 --> 00:00:37.690
+Once opened, you will see all the
+information we previously recorded.
+
+00:00:38.370 --> 00:00:39.370
+Step 2.
+
+00:00:39.800 --> 00:00:42.050
+Data exploration and descriptive
+statistics.
+
+00:00:43.209 --> 00:00:45.150
+Now we will focus on descriptive
+statistics.
+
+00:00:46.069 --> 00:00:49.310
+In the top tool bar, select Exploration.
+
+00:00:49.829 --> 00:00:51.230
+And then click on Descriptives.
+
+00:00:51.650 --> 00:00:53.338
+You will notice that
+in the left panel a list
+
+00:00:53.339 --> 00:00:54.979
+appears with all the
+variables we created.
+
+00:00:55.610 --> 00:00:56.601
+Step 3.
+
+00:00:56.625 --> 00:00:57.665
+Generate frequency tables.
+
+00:00:58.499 --> 00:01:01.070
+We will make an example with the natural
+and legal variable.
+
+00:01:01.949 --> 00:01:04.690
+Select it and click on the arrow to move
+it to the variable square.
+
+00:01:05.949 --> 00:01:08.510
+In the right panel of the results,
+a summary will appear.
+
+00:01:09.689 --> 00:01:11.390
+First, verify the value n.
+
+00:01:12.059 --> 00:01:16.170
+This indicates the number of cases and
+must mark 8, coinciding with our example.
+
+00:01:17.109 --> 00:01:19.441
+Although you see other
+measures such as media or
+
+00:01:19.442 --> 00:01:21.770
+fashion, for now we will
+focus on the basic distribution.
+
+00:01:23.110 --> 00:01:24.110
+Step 4.
+
+00:01:24.720 --> 00:01:25.690
+Interpretation of results.
+
+00:01:25.691 --> 00:01:29.110
+To better visualize the
+data, mark the option
+
+00:01:29.111 --> 00:01:31.550
+frequency tables in
+the configuration panel.
+
+00:01:32.349 --> 00:01:35.590
+Automatically, a table will be generated
+that indicates to us, for example,
+
+00:01:36.064 --> 00:01:39.170
+that we count with 3 government
+authorities or traditional structures,
+
+00:01:40.319 --> 00:01:47.890
+37.5%, 3 cooperative or community
+companies, 37.5%, an indigenous NGO,
+
+00:01:48.989 --> 00:01:56.370
+12.5%, an indigenous organization,
+12.5%, Step 5.
+
+00:01:57.390 --> 00:01:58.910
+Multiple selection variables analysis.
+
+00:01:58.999 --> 00:02:00.726
+We can repeat this
+process with the variables
+
+00:02:00.727 --> 00:02:02.407
+we create for the
+defense of the territory.
+
+00:02:03.189 --> 00:02:07.079
+If we add land recovery,
+we will see that 50%
+
+00:02:07.080 --> 00:02:10.449
+of organizations, 4 of
+8, perform this action.
+
+00:02:11.349 --> 00:02:15.910
+By adding community surveillance or action
+in front of mega projects, the table will
+
+00:02:15.911 --> 00:02:19.030
+be updated showing us how many
+organizations respond positively to each
+
+00:02:19.031 --> 00:02:21.890
+category, allowing us a precise diagnosis
+of their activities.
+
+00:02:22.690 --> 00:02:23.690
+Step 6.
+
+00:02:24.690 --> 00:02:25.690
+Information export.
+
+00:02:26.570 --> 00:02:29.110
+Finally, these tables are ready for your
+reports.
+
+00:02:30.340 --> 00:02:32.691
+You just have to make
+right click on the table,
+
+00:02:32.692 --> 00:02:35.650
+select copy and paste it in
+a Word or Excel document.
+
+00:02:36.230 --> 00:02:39.450
+With this, you can do more detailed
+analysis and presentations of your results.
+
+00:02:44.190 --> 00:02:47.266
+A very powerful tool
+that we will explore now is
+
+00:02:47.267 --> 00:02:49.600
+the creation of crossed
+or contingency tables.
+
+00:02:50.800 --> 00:02:51.800
+Step 1.
+
+00:02:52.440 --> 00:02:52.700
+Table configuration.
+
+00:02:52.701 --> 00:02:57.720
+To start, go to the upper menu and select
+the option Frequency.
+
+00:02:58.600 --> 00:03:02.920
+Within this menu, we will click on
+contingency tables, independent samples.
+
+00:03:03.900 --> 00:03:06.272
+This function allows us
+to compare two variables
+
+00:03:06.273 --> 00:03:08.280
+simultaneously to find
+relationships between them.
+
+00:03:09.080 --> 00:03:10.080
+Step 2.
+
+00:03:10.600 --> 00:03:11.600
+Variable selection.
+
+00:03:11.980 --> 00:03:16.910
+For our example, we will use
+the variable natural, legal, select
+
+00:03:16.911 --> 00:03:20.160
+it and click on the arrow to
+locate it in the grid of rows.
+
+00:03:21.190 --> 00:03:24.300
+Then we will take the variable community
+surveillance for columns.
+
+00:03:25.114 --> 00:03:28.700
+Automatically, YAMOBI will generate a
+crossed table with detailed information
+
+00:03:28.701 --> 00:03:32.580
+about the relationship between the type of
+organization and its actions related to
+
+00:03:32.581 --> 00:03:34.460
+territorial rights and the defense of the
+land.
+
+00:03:35.540 --> 00:03:36.540
+Step 3.
+
+00:03:36.629 --> 00:03:37.669
+Interpretation of results.
+
+00:03:38.640 --> 00:03:39.960
+Let's analyze the obtained data.
+
+00:03:40.640 --> 00:03:44.080
+In the case of the organizations
+identified as government authority or
+
+00:03:44.081 --> 00:03:47.159
+traditional structures, we
+observe that the three registered
+
+00:03:47.160 --> 00:03:49.720
+organizations carry out
+community surveillance actions.
+
+00:03:50.360 --> 00:03:55.140
+On the other hand, in cooperatives or
+community companies, we see that two of
+
+00:03:55.141 --> 00:03:57.740
+them carry out these actions, while one
+does not.
+
+00:03:58.420 --> 00:03:59.420
+Step 4.
+
+00:04:00.480 --> 00:04:01.480
+Use of analysis.
+
+00:04:02.860 --> 00:04:07.260
+This type of tables is essential when we
+want to identify patterns or direct
+
+00:04:07.261 --> 00:04:11.560
+relationships between different variables
+of our database, allowing us to make a
+
+00:04:11.561 --> 00:04:14.000
+much deeper analysis of the collected
+information.
+
+00:04:14.790 --> 00:04:18.500
+As a final step, we will explore one of
+the most powerful tools of YAMOBI,
+
+00:04:19.070 --> 00:04:20.100
+the data filtering.
+
+00:04:21.079 --> 00:04:22.079
+Step 1.
+
+00:04:22.820 --> 00:04:23.880
+Access to the filter menu.
+
+00:04:24.785 --> 00:04:28.024
+This function is extremely
+useful when we work with large
+
+00:04:28.025 --> 00:04:31.080
+volume of information and we
+want to analyze a specific group.
+
+00:04:32.220 --> 00:04:36.200
+To activate it, go to the top menu and
+select the filter option.
+
+00:04:37.300 --> 00:04:38.300
+Step 2.
+
+00:04:38.505 --> 00:04:39.920
+Creation of the filter formula.
+
+00:04:40.860 --> 00:04:44.541
+Suppose we want to analyze
+only the organizations identified
+
+00:04:44.542 --> 00:04:46.622
+as authority of government
+or traditional structures.
+
+00:04:48.070 --> 00:04:50.400
+For this, we must enter a formula in the
+filter box.
+
+00:04:51.480 --> 00:04:55.140
+We will write the name of the variable
+exactly as we created it.
+
+00:04:55.240 --> 00:04:57.305
+For example,
+naturalization of a legal or
+
+00:04:57.306 --> 00:04:59.066
+legal low, respecting
+capital and guidelines.
+
+00:04:59.765 --> 00:05:02.820
+Following this, we will place a double
+sign of equal, equal equal.
+
+00:05:03.800 --> 00:05:04.800
+Step 3.
+
+00:05:04.900 --> 00:05:05.900
+Use of numerical codes.
+
+00:05:06.920 --> 00:05:09.080
+YAMOBI automatically assigns a number to
+each category.
+
+00:05:09.720 --> 00:05:13.040
+In our example, the traditional
+authorities correspond to number 3.
+
+00:05:13.610 --> 00:05:16.660
+When completing the formula with this
+number, the software will automatically
+
+00:05:16.661 --> 00:05:19.823
+hide all the cases that do
+not comply with this criteria,
+
+00:05:19.824 --> 00:05:22.040
+leaving only the information
+that interests us visible.
+
+00:05:22.480 --> 00:05:23.480
+Step 4.
+
+00:05:24.600 --> 00:05:25.600
+Segmented analysis.
+
+00:05:26.140 --> 00:05:29.397
+With the active filter, any
+analysis that we perform as
+
+00:05:29.398 --> 00:05:32.040
+frequency tables will be applied
+only to the selected group.
+
+00:05:32.870 --> 00:05:36.640
+For example, we could discover that 100%
+of organizations that are authority of
+
+00:05:36.641 --> 00:05:40.160
+government or traditional structures carry
+out recovery processes of land.
+
+00:05:41.110 --> 00:05:44.220
+This capacity of segmentation is
+fundamental for a diagnosis of the data.
+
+00:05:45.240 --> 00:05:46.240
+Step 5.
+
+00:05:46.320 --> 00:05:47.320
+Disactivate the filter.
+
+00:05:48.285 --> 00:05:51.340
+If you want to see the database again
+complete to perform other analysis,
+
+00:05:51.815 --> 00:05:54.600
+simply return to the filter window and
+delete the formula.
+
+00:05:55.530 --> 00:05:59.880
+By doing so, all cases will be available
+again for frequency tables or contingency.
+
+00:06:00.540 --> 00:06:01.540
+Congratulations.
+
+00:06:02.640 --> 00:06:06.560
+With these steps, you already have all the
+necessary tools to collect information
+
+00:06:06.561 --> 00:06:11.760
+effectively, structure your database and
+perform statistical analysis to know
+
+00:06:11.761 --> 00:06:14.040
+thoroughly your organization or present
+reports.
+
+00:06:15.340 --> 00:06:18.920
+They have learned from the basic
+configuration to the use of frequency
+
+00:06:18.921 --> 00:06:23.020
+tables, crossed tables and the
+segmentation of cases through filters.
+
+00:06:23.920 --> 00:06:26.003
+It is time that they
+start this process and
+
+00:06:26.004 --> 00:06:27.844
+transform their data
+into actionable knowledge.
+
+00:06:28.180 --> 00:06:32.040
+Remember that on the part of Paguanca and
+the Lampa-Guanca team, we are at your full
+
+00:06:32.041 --> 00:06:35.800
+disposal to attend to any doubt or
+difficulty that arises on the road.
+
+00:06:36.350 --> 00:06:37.380
+Go ahead and good luck!
