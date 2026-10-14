@@ -1,0 +1,659 @@
+﻿WEBVTT
+
+00:00:06.759 --> 00:00:09.371
+Welcome to the second
+part of this tutorial, where we
+
+00:00:09.372 --> 00:00:12.930
+will focus on the data analysis
+using the software Jamobi.
+
+00:00:14.239 --> 00:00:16.225
+Before starting, it is
+essential to remember that
+
+00:00:16.226 --> 00:00:19.570
+we must already have built
+our form in Google Forms.
+
+00:00:20.190 --> 00:00:23.610
+To advance with the analysis, it is
+necessary that this form has already been
+
+00:00:23.611 --> 00:00:27.350
+completed by organizations or people with
+whom we previously shared the link.
+
+00:00:28.470 --> 00:00:29.470
+Step 1.
+
+00:00:29.835 --> 00:00:30.835
+Access the data.
+
+00:00:32.159 --> 00:00:34.850
+The first thing we will do will be to
+enter our email account.
+
+00:00:35.439 --> 00:00:39.270
+Go to the application menu, the icon of
+the points in the upper right corner,
+
+00:00:40.059 --> 00:00:41.450
+and select Forms.
+
+00:00:42.519 --> 00:00:45.310
+Once there, open the form that you
+previously created.
+
+00:00:46.350 --> 00:00:47.350
+Step 2.
+
+00:00:47.490 --> 00:00:48.490
+Check the answers.
+
+00:00:48.610 --> 00:00:51.014
+In the upper part of
+the screen there will be
+
+00:00:51.015 --> 00:00:53.110
+three tabs, questions,
+answers and configuration.
+
+00:00:53.775 --> 00:00:54.970
+We will click on answers.
+
+00:00:55.560 --> 00:00:58.190
+Here you can see the total
+number of participation
+
+00:00:58.191 --> 00:01:00.330
+and a brief summary
+of the collected data.
+
+00:01:01.310 --> 00:01:02.310
+Step 3.
+
+00:01:03.090 --> 00:01:04.090
+Export the spreadsheet.
+
+00:01:04.609 --> 00:01:08.310
+To work with these data, select the option
+to see in the spreadsheet.
+
+00:01:09.659 --> 00:01:12.819
+This will allow you to access the information
+in a format compatible with Excel.
+
+00:01:13.410 --> 00:01:14.410
+Step 4.
+
+00:01:14.850 --> 00:01:16.330
+Understand the structure of the data.
+
+00:01:16.839 --> 00:01:19.119
+When you open the spreadsheet,
+you will see the following.
+
+00:01:20.049 --> 00:01:22.810
+In the rows, we will find the numbers of
+each answer.
+
+00:01:23.729 --> 00:01:26.752
+In statistics, this is known
+as the number of cases that
+
+00:01:26.753 --> 00:01:29.290
+represents each time that an
+organization completed the form.
+
+00:01:30.199 --> 00:01:32.510
+In the columns, we will see the questions
+we made.
+
+00:01:33.509 --> 00:01:37.270
+Each of these columns represents a
+variable, which is the specific
+
+00:01:37.271 --> 00:01:39.511
+information that we want to analyze of
+each organization.
+
+00:01:40.769 --> 00:01:44.050
+Continuing with the process, once the
+application Yamobi is installed,
+
+00:01:44.549 --> 00:01:48.930
+we look for the icon in our office or
+application menu and we open it.
+
+00:01:49.730 --> 00:01:50.730
+Step 1.
+
+00:01:51.030 --> 00:01:52.030
+Main interface.
+
+00:01:52.364 --> 00:01:55.084
+When entering, you will find
+a very similar grid interface
+
+00:01:55.085 --> 00:01:58.170
+to the one of Excel, organized
+by rows and columns.
+
+00:01:59.219 --> 00:02:02.150
+This is the space where we will register
+the collected information of the
+
+00:02:02.151 --> 00:02:04.650
+organizations or members that answered our
+form.
+
+00:02:06.170 --> 00:02:07.170
+Step 2.
+
+00:02:08.169 --> 00:02:09.169
+Variable configuration.
+
+00:02:10.260 --> 00:02:12.297
+It is very important to
+correctly configure the
+
+00:02:12.298 --> 00:02:14.650
+columns, which represent
+our questions or categories.
+
+00:02:16.250 --> 00:02:18.486
+When accessing the
+configuration of a column, the
+
+00:02:18.487 --> 00:02:20.647
+first thing we must define
+is the name of the variable.
+
+00:02:21.360 --> 00:02:23.643
+It is recommended to use
+short names and avoid special
+
+00:02:23.644 --> 00:02:26.350
+characters to facilitate the
+processing of data in the software.
+
+00:02:27.230 --> 00:02:28.230
+Step 3.
+
+00:02:28.694 --> 00:02:30.054
+Definition of the type of measure.
+
+00:02:30.410 --> 00:02:35.210
+The next key point is the type of measure,
+which directly depends on the nature of
+
+00:02:35.211 --> 00:02:36.990
+the question and its categories of
+response.
+
+00:02:38.240 --> 00:02:40.388
+Although the program
+offers several options, we
+
+00:02:40.389 --> 00:02:42.910
+will focus on the three
+main ones for our analysis.
+
+00:02:43.610 --> 00:02:44.610
+Nominal.
+
+00:02:45.054 --> 00:02:48.290
+It is used for variables, whose categories
+do not have a hierarchy order.
+
+00:02:48.970 --> 00:02:50.890
+For example, names or types of
+organization.
+
+00:02:52.050 --> 00:02:53.050
+Ordinal.
+
+00:02:53.220 --> 00:02:56.490
+It is applied when the categories do
+follow a specific or hierarchical order.
+
+00:02:56.930 --> 00:02:57.930
+Continuous.
+
+00:02:58.030 --> 00:03:01.189
+It is the option for numerical
+variables, used when the answer
+
+00:03:01.190 --> 00:03:03.870
+is a number or a measure,
+like the extension in kilometers.
+
+00:03:05.970 --> 00:03:08.252
+A fundamental point
+that we must consider is
+
+00:03:08.253 --> 00:03:10.013
+the handling of multiple
+selection questions.
+
+00:03:11.450 --> 00:03:14.440
+In our form, these are
+the questions that allow
+
+00:03:14.441 --> 00:03:16.510
+users to mark several
+options simultaneously.
+
+00:03:18.080 --> 00:03:21.150
+It is important to note how these data
+appear in the Google spreadsheet.
+
+00:03:22.250 --> 00:03:25.490
+You will observe that all the answers
+selected by the same organization are
+
+00:03:25.491 --> 00:03:28.310
+grouped in a single cell, separated simply
+by comma.
+
+00:03:29.810 --> 00:03:33.870
+Identifying this format is key before
+taking the data to Yamobi, since it will
+
+00:03:33.871 --> 00:03:37.510
+require a special treatment so that each
+option can be analyzed as an independent
+
+00:03:37.511 --> 00:03:40.617
+variable, unlike the
+unique selection questions,
+
+00:03:40.618 --> 00:03:42.930
+where the user only
+chooses one option.
+
+00:03:43.495 --> 00:03:46.335
+In this case, it is not necessary to
+create or add additional variables.
+
+00:03:49.250 --> 00:03:53.870
+With these clear precisions, it is time to
+start building our database in Yamobi.
+
+00:03:55.110 --> 00:03:56.076
+Step 1.
+
+00:03:56.100 --> 00:03:57.910
+Identify the data in the Google
+spreadsheet.
+
+00:03:59.240 --> 00:04:02.630
+First, we will open our spreadsheet with
+the answers of the form.
+
+00:04:03.750 --> 00:04:08.070
+For this example, we will work with three
+questions, starting with the first one.
+
+00:04:09.115 --> 00:04:10.595
+What is the name of the organization?
+
+00:04:11.800 --> 00:04:16.209
+You will see that this question heads the
+column, while the rows, from the number,
+
+00:04:16.210 --> 00:04:18.649
+number 2, contain the answers of each
+organization.
+
+00:04:19.205 --> 00:04:21.070
+In total, we have 8 cases.
+
+00:04:22.290 --> 00:04:23.290
+Step 2.
+
+00:04:23.615 --> 00:04:24.970
+Configure the variable in Yamobi.
+
+00:04:25.575 --> 00:04:28.500
+Now, in the Yamobi interface,
+we will double-click on
+
+00:04:28.501 --> 00:04:32.370
+the letter A in the top corner
+to configure the column.
+
+00:04:33.100 --> 00:04:37.250
+Instead of writing the full question as
+the name of the variable, we will use a
+
+00:04:37.251 --> 00:04:39.887
+short and descriptive
+name, as the name of
+
+00:04:39.888 --> 00:04:42.370
+the organization to
+facilitate the analysis.
+
+00:04:43.690 --> 00:04:44.690
+Step 3.
+
+00:04:44.990 --> 00:04:46.250
+Define measure and description.
+
+00:04:47.100 --> 00:04:49.290
+Next, we will define the type of measure.
+
+00:04:49.835 --> 00:04:52.770
+When we deal with names of organizations
+that do not have a hierarchical order
+
+00:04:52.771 --> 00:04:55.170
+between them, we will select the nominal
+option.
+
+00:04:56.265 --> 00:04:59.590
+In the description field, here we can
+write the full question.
+
+00:05:00.710 --> 00:05:02.190
+What is the name of the organization?
+
+00:05:02.805 --> 00:05:05.650
+Which will serve us as a visual guide
+within the database?
+
+00:05:06.850 --> 00:05:07.850
+Step 4.
+
+00:05:09.010 --> 00:05:09.986
+Data load.
+
+00:05:10.010 --> 00:05:12.427
+Finally, we are located
+in the first row to
+
+00:05:12.428 --> 00:05:14.530
+enter the answers of
+the Google spreadsheet.
+
+00:05:15.630 --> 00:05:16.650
+You can do it manually.
+
+00:05:17.410 --> 00:05:22.410
+Or, for greater quickness, simply copy the
+data of the spreadsheet, right-click and
+
+00:05:22.411 --> 00:05:26.070
+copy, and paste them directly in the
+corresponding column of Yamobi.
+
+00:05:26.245 --> 00:05:29.590
+Make sure that, for this exercise, the
+eight cases have been imported correctly.
+
+00:05:34.395 --> 00:05:37.080
+We continue to feed our database in
+Yamobi.
+
+00:05:37.880 --> 00:05:39.980
+Now we will proceed with question number
+2.
+
+00:05:40.880 --> 00:05:41.880
+Step 1.
+
+00:05:42.110 --> 00:05:43.140
+Location of the data.
+
+00:05:44.300 --> 00:05:48.080
+We return to our Google spreadsheet to
+locate the next column.
+
+00:05:49.450 --> 00:05:52.456
+The question is, what
+is the legal nature or
+
+00:05:52.457 --> 00:05:54.620
+status of recognition
+of its organization?
+
+00:05:55.970 --> 00:05:59.860
+It is advisable to verify in the original
+form that the question coincides and
+
+00:05:59.861 --> 00:06:05.280
+remember that, in this case, it is a
+single question with four answers.
+
+00:06:06.360 --> 00:06:07.360
+Step 2.
+
+00:06:07.840 --> 00:06:09.040
+Configuration in Yamobi.
+
+00:06:10.065 --> 00:06:15.300
+Now, in Yamobi, we go to column B and
+double-click to configure it.
+
+00:06:15.840 --> 00:06:20.340
+We will assign a simplified name for the
+variable, such as natural nature under legal.
+
+00:06:21.150 --> 00:06:24.760
+Just like in the previous case,
+the type of measure must be nominal,
+
+00:06:25.400 --> 00:06:27.600
+since the categories do not have a
+hierarchical order.
+
+00:06:28.560 --> 00:06:29.560
+Step 3.
+
+00:06:29.705 --> 00:06:31.400
+Description and data load.
+
+00:06:34.160 --> 00:06:36.412
+In the description field,
+we will paste the full
+
+00:06:36.413 --> 00:06:38.720
+question of the form to
+facilitate our reference.
+
+00:06:40.065 --> 00:06:43.440
+Once configured to the column,
+we must transfer the answers, ensuring
+
+00:06:43.441 --> 00:06:45.601
+that they coincide with the corresponding
+organization.
+
+00:06:47.230 --> 00:06:50.720
+You can copy all the answers from the
+spreadsheet and paste them in Yamobi,
+
+00:06:51.140 --> 00:06:52.140
+or enter them manually.
+
+00:06:59.270 --> 00:07:01.090
+By finishing the
+registration of the second
+
+00:07:01.091 --> 00:07:03.520
+question, we will move
+on to question number 3.
+
+00:07:04.470 --> 00:07:08.100
+This step is crucial, since it requires a
+special treatment in Yamobi.
+
+00:07:09.580 --> 00:07:10.580
+Step 1.
+
+00:07:11.070 --> 00:07:14.860
+If we check our Google spreadsheet,
+we will notice that in the questions of
+
+00:07:14.861 --> 00:07:19.220
+multiple selection, such as the actions of
+defense of the territory, the answers
+
+00:07:19.221 --> 00:07:22.600
+appear grouped in a single cell and
+separated by commas.
+
+00:07:23.305 --> 00:07:26.503
+For example, an organization
+may have marked land
+
+00:07:26.504 --> 00:07:30.180
+recovery and community
+vigilance at the same time.
+
+00:07:31.380 --> 00:07:35.620
+Since Yamobi cannot analyze these options
+if they are together in a single column,
+
+00:07:36.070 --> 00:07:38.030
+we must transform them into independent
+variables.
+
+00:07:38.560 --> 00:07:39.560
+Step 2.
+
+00:07:40.390 --> 00:07:41.720
+Creation of multiple variables.
+
+00:07:42.700 --> 00:07:46.860
+Instead of creating a single column for
+the question, we will create a column for
+
+00:07:46.861 --> 00:07:48.740
+each option of available response in the
+form.
+
+00:07:49.530 --> 00:07:54.560
+In our example, we will configure four
+types of variables, nominal in column C,
+
+00:07:55.210 --> 00:07:58.776
+we will create the
+variable land recovery in
+
+00:07:58.777 --> 00:08:01.380
+column D, we will
+create place protection.
+
+00:08:12.550 --> 00:08:15.150
+In the next column, column E, we will
+create community vigilance.
+
+00:08:29.050 --> 00:08:32.740
+And finally, in column F, action
+megaprojects.
+
+00:08:43.049 --> 00:08:44.049
+Step 3.
+
+00:08:44.579 --> 00:08:45.859
+How do we enter the information?
+
+00:08:46.470 --> 00:08:47.490
+It is very simple.
+
+00:08:48.180 --> 00:08:50.979
+We return to our Google
+spreadsheet and verify
+
+00:08:50.980 --> 00:08:52.610
+which options each
+organization selected.
+
+00:08:53.249 --> 00:08:58.790
+If the organization marked an option, we
+write yes in the corresponding box in Yamobi.
+
+00:08:59.869 --> 00:09:03.470
+If the option was not selected,
+we write no.
+
+00:09:27.875 --> 00:09:31.850
+In this way, a single question of the form
+becomes four different variables,
+
+00:09:32.449 --> 00:09:35.239
+allowing us to make a
+more precise statistical
+
+00:09:35.240 --> 00:09:37.120
+analysis for each action
+of territorial defense.
+
+00:09:37.890 --> 00:09:38.890
+Perfect.
+
+00:09:39.169 --> 00:09:42.750
+Once we have finished assigning the
+answers of our three questions of example,
+
+00:09:43.500 --> 00:09:47.150
+ensuring that we have the eight registered
+cases and the variables correctly
+
+00:09:47.151 --> 00:09:50.410
+configured, including the special
+treatment of multiple options.
+
+00:09:51.869 --> 00:09:53.690
+The next step is to secure our work.
+
+00:09:54.549 --> 00:09:58.350
+So that we can access this information in
+the future and continue to feed the
+
+00:09:58.351 --> 00:10:00.710
+database with new data from our Google
+form.
+
+00:10:01.829 --> 00:10:02.989
+We will continue these steps.
+
+00:10:03.630 --> 00:10:06.768
+Go to the upper left side
+of the Yamobi interface,
+
+00:10:06.769 --> 00:10:09.190
+where the main menu is
+represented by the three rows.
+
+00:10:10.859 --> 00:10:12.610
+Select the option Save as.
+
+00:10:13.339 --> 00:10:17.230
+In the upper part of the window that is
+displayed, change the name of the file by
+
+00:10:17.579 --> 00:10:18.590
+map or organization.
+
+00:10:19.319 --> 00:10:21.690
+Click on the button Save and ready.
+
+00:10:22.260 --> 00:10:24.116
+We already have our
+database saved and prepared
+
+00:10:24.117 --> 00:10:27.890
+to be consulted or updated
+at any time we need it.
+
+00:10:27.989 --> 00:10:30.951
+This file now contains all
+the structure of variables and
+
+00:10:30.952 --> 00:10:33.650
+cases that we have carefully
+processed from the spreadsheet.
