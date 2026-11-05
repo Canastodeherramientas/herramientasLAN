@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Acta de reunión</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f6f8;
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  h1 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #e0e4e8;
+    padding-bottom: 10px;
+    font-size: 1.6em;
+  }
+  h2 {
+    font-size: 1.15em;
+    color: #34495e;
+    margin: 25px 0 10px 0;
+    padding: 8px 12px;
+    background: #eef2f5;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 5px 0;
+    font-size: 0.95em;
+    color: #34495e;
+  }
+  input[type="text"], input[type="date"], input[type="time"], textarea, select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-family: inherit;
+    background: #fff;
+    transition: border 0.2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52,152,219,0.15);
+  }
+  /* Textareas auto-expansibles sin scrollbar */
+  textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 70px;
+    line-height: 1.5;
+  }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 180px; }
+  .row-3 > div { flex: 1; min-width: 140px; }
+
+  button {
+    background: #3498db;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  button:hover { background: #2980b9; }
+  button.small {
+    padding: 5px 10px;
+    font-size: 0.85em;
+    background: #ecf0f1;
+    color: #2c3e50;
+  }
+  button.small:hover { background: #d5dbdb; }
+  button.danger {
+    background: #e74c3c;
+    padding: 4px 8px;
+    font-size: 0.8em;
+  }
+  button.danger:hover { background: #c0392b; }
+
+  /* Tabla participantes */
+  table.participantes {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+  table.participantes th {
+    background: #eef2f5;
+    padding: 8px;
+    text-align: left;
+    font-size: 0.9em;
+    border: 1px solid #d0d7de;
+  }
+  table.participantes td {
+    padding: 4px;
+    border: 1px solid #d0d7de;
+  }
+  table.participantes input {
+    border: none;
+    padding: 6px;
+    width: 100%;
+  }
+  table.participantes input:focus {
+    background: #f8fbfd;
+    box-shadow: none;
+  }
+
+  /* Puntos agenda */
+  .punto-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 6px 0;
+  }
+  .punto-num {
+    min-width: 30px;
+    font-weight: 600;
+    color: #3498db;
+    font-size: 0.95em;
+  }
+  .punto-item input { flex: 1; }
+
+  /* Desarrollo enlazado */
+  .desarrollo-punto {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f8fbfd;
+    border-left: 3px solid #3498db;
+    border-radius: 4px;
+  }
+  .desarrollo-punto .punto-titulo {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  .desarrollo-punto .punto-titulo .enlace-icon {
+    color: #3498db;
+    font-size: 0.85em;
+    margin-right: 4px;
+  }
+
+  /* Acuerdos */
+  .acuerdo-item {
+    background: #f8fbfd;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 8px 0;
+    border: 1px solid #e0e4e8;
+  }
+  .acuerdo-item .row { margin-bottom: 5px; }
+  .acuerdo-item label { margin: 3px 0 2px 0; font-size: 0.85em; }
+
+  /* Botones de acción */
+  .acciones {
+    margin: 25px 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Vista del acta */
+  #vistaActa {
+    margin-top: 30px;
+    padding: 25px;
+    background: #fff;
+    border: 1px solid #e0e4e8;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 0.95em;
+    line-height: 1.6;
+  }
+  #vistaActa h3 {
+    margin: 15px 0 5px 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #e0e4e8;
+    padding-bottom: 3px;
+    white-space: normal;
+  }
+  #vistaActa p { white-space: pre-wrap; margin: 6px 0; }
+  #vistaActa table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+  }
+  #vistaActa table th, #vistaActa table td {
+    border: 1px solid #d0d7de;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  #vistaActa table th { background: #eef2f5; }
+
+  .hint {
+    font-size: 0.82em;
+    color: #7f8c8d;
+    margin-top: 3px;
+    font-style: italic;
+  }
+
+
+
+  /* Impresión: mostrar todo el contenido */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .container { box-shadow: none; padding: 0; }
+    .acciones, button { display: none !important; }
+    textarea {
+      border: none !important;
+      overflow: visible !important;
+      height: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Acta de reunión</h1>
+  <p style="color:#7f8c8d; font-size:0.9em; margin-top:-5px;">
+    Complete los campos. El acta se arma abajo. Puede copiar, descargar o imprimir.
+    Si guarda este archivo en su computadora o celular, puede usarlo sin internet.
+  </p>
+
+  <!-- DATOS GENERALES -->
+  <h2>Datos generales</h2>
+  <label>Organización / proceso</label>
+  <input type="text" id="organizacion">
+
+  <label>Nombre de la reunión</label>
+  <input type="text" id="nombreReunion">
+
+  <div class="row row-3">
+    <div>
+      <label>Fecha</label>
+      <input type="date" id="fecha">
+    </div>
+    <div>
+      <label>Hora de inicio</label>
+      <input type="time" id="horaInicio">
+    </div>
+    <div>
+      <label>Hora de fin</label>
+      <input type="time" id="horaFin">
+    </div>
+  </div>
+
+  <label>Lugar o plataforma</label>
+  <input type="text" id="lugar">
+
+  <div class="row">
+    <div>
+      <label>Facilita</label>
+      <input type="text" id="facilita">
+    </div>
+    <div>
+      <label>Anota / relator(a)</label>
+      <input type="text" id="relator">
+    </div>
+  </div>
+
+  <!-- OBJETIVO -->
+  <h2>Objetivo de la reunión</h2>
+  <textarea id="objetivo" placeholder="Escriba el objetivo general de la reunión..." oninput="autoResize(this)"></textarea>
+
+  <!-- AGENDA -->
+  <h2>Agenda de la reunión</h2>
+  <p class="hint">Agregue los puntos de la agenda en orden. Cada punto aparecerá automáticamente en "Desarrollo" para que lo desarrolle. También puede escribir la agenda libremente.</p>
+  <div id="agendaPuntos"></div>
+  <button class="small" onclick="agregarPuntoAgenda()">+ Agregar punto</button>
+  <label style="margin-top:15px;">Agenda (texto libre, opcional)</label>
+  <textarea id="agendaLibre" placeholder="O describa la agenda en texto libre..." oninput="autoResize(this)"></textarea>
+
+  <!-- PARTICIPANTES -->
+  <h2>Participantes</h2>
+  <table class="participantes">
+    <thead>
+      <tr>
+        <th style="width:35%">Nombre</th>
+        <th style="width:30%">Cargo</th>
+        <th style="width:30%">Organización</th>
+        <th style="width:5%"></th>
+      </tr>
+    </thead>
+    <tbody id="participantesBody">
+    </tbody>
+  </table>
+  <button class="small" onclick="agregarParticipante()">+ Agregar participante</button>
+
+  <!-- DESARROLLO -->
+  <h2>Desarrollo</h2>
+  <p class="hint">Los puntos que escriba en la agenda aparecerán aquí enlazados para desarrollarlos. También puede escribir libremente abajo.</p>
+  <div id="desarrolloPuntos"></div>
+  <label style="margin-top:15px;">Desarrollo (texto libre)</label>
+  <textarea id="desarrolloLibre" placeholder="Escriba aquí el desarrollo general de la reunión..." style="min-height:120px;" oninput="autoResize(this)"></textarea>
+
+  <!-- ACUERDOS -->
+  <h2>Acuerdos</h2>
+  <p class="hint">Use frases cortas: qué se hará, quién lo hará y para cuándo.</p>
+  <div id="acuerdos"></div>
+  <button class="small" onclick="agregarAcuerdo()">+ Agregar acuerdo</button>
+
+  <!-- PENDIENTES -->
+  <h2>Pendientes</h2>
+  <textarea id="pendientes" placeholder="Liste los pendientes..." oninput="autoResize(this)"></textarea>
+
+  <!-- PRÓXIMA REUNIÓN -->
+  <h2>Próxima reunión</h2>
+  <div class="row">
+    <div>
+      <label>Fecha tentativa</label>
+      <input type="date" id="proximaFecha">
+    </div>
+    <div>
+      <label>Hora tentativa</label>
+      <input type="time" id="proximaHora">
+    </div>
+  </div>
+  <label>Lugar / plataforma</label>
+  <input type="text" id="proximaLugar">
+
+  <!-- OBSERVACIONES -->
+  <h2>Observaciones</h2>
+  <textarea id="observaciones" placeholder="Observaciones adicionales..." oninput="autoResize(this)"></textarea>
+
+  <!-- ACCIONES -->
+  <div class="acciones">
+    <button onclick="actualizarActa()">Actualizar acta</button>
+    <button class="small" onclick="copiarActa()">Copiar</button>
+    <button class="small" onclick="descargarTxt()">Descargar .txt</button>
+    <button class="small" onclick="window.print()">Imprimir / Guardar PDF</button>
+    <button class="small" onclick="limpiarTodo()" style="background:#e74c3c;color:#fff;">Limpiar</button>
+  </div>
+
+
+  <!-- VISTA DEL ACTA -->
+  <h2>Vista del acta</h2>
+  <p class="hint">Complete los campos y presione "Actualizar acta".</p>
+  <div id="vistaActa">— La vista del acta aparecerá aquí —</div>
+</div>
+
+<script>
+  // ===== AUTO-RESIZE TEXTAREAS =====
+  function autoResize(el) {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = (el.scrollHeight) + "px";
+  }
+  function autoResizeAll() {
+    document.querySelectorAll("textarea").forEach(autoResize);
+  }
+
+  // ===== AGENDA =====
+  let puntosAgenda = [];
+  function agregarPuntoAgenda() {
+    puntosAgenda.push("");
+    renderAgenda();
+    renderDesarrollo();
+  }
+  function eliminarPuntoAgenda(i) {
+    puntosAgenda.splice(i, 1);
+    // También eliminar el desarrollo correspondiente
+    desarrolloPuntos.splice(i, 1);
+    renderAgenda();
+    renderDesarrollo();
+  }
+  function renderAgenda() {
+    const cont = document.getElementById("agendaPuntos");
+    cont.innerHTML = "";
+    puntosAgenda.forEach((p, i) => {
+      const div = document.createElement("div");
+      div.className = "punto-item";
+      div.innerHTML = `
+        <span class="punto-num">${i+1}.</span>
+        <input type="text" value="${escapeHtml(p)}" placeholder="Punto ${i+1} de la agenda"
+               oninput="actualizarPuntoAgenda(${i}, this.value)">
+        <button class="danger" onclick="eliminarPuntoAgenda(${i})">✕</button>
+      `;
+      cont.appendChild(div);
+    });
+  }
+  // Actualiza el punto de agenda y el título del desarrollo en tiempo real
+  function actualizarPuntoAgenda(i, valor) {
+    puntosAgenda[i] = valor;
+    // Actualizar solo el título del desarrollo correspondiente (sin perder el foco del textarea)
+    const tituloEl = document.getElementById("desarrolloTitulo_" + i);
+    if (tituloEl) {
+      const texto = valor.trim() || `Punto ${i+1}`;
+      tituloEl.innerHTML = `<span class="enlace-icon">🔗</span>${i+1}. ${escapeHtml(texto)}`;
+    }
+  }
+
+  // ===== DESARROLLO (enlazado con agenda) =====
+  let desarrolloPuntos = [];
+  function renderDesarrollo() {
+    const cont = document.getElementById("desarrolloPuntos");
+    cont.innerHTML = "";
+    // Sincronizar longitud
+    while (desarrolloPuntos.length < puntosAgenda.length) desarrolloPuntos.push("");
+    while (desarrolloPuntos.length > puntosAgenda.length) desarrolloPuntos.pop();
+
+    puntosAgenda.forEach((p, i) => {
+      const titulo = p.trim() || `Punto ${i+1}`;
+      const div = document.createElement("div");
+      div.className = "desarrollo-punto";
+      div.innerHTML = `
+        <span class="punto-titulo" id="desarrolloTitulo_${i}">
+          <span class="enlace-icon">🔗</span>${i+1}. ${escapeHtml(titulo)}
+        </span>
+        <textarea placeholder="Desarrolle este punto de la agenda..."
+                  oninput="desarrolloPuntos[${i}] = this.value; autoResize(this)">${escapeHtml(desarrolloPuntos[i])}</textarea>
+      `;
+      cont.appendChild(div);
+    });
+    // Auto-resize de los textareas recién creados
+    cont.querySelectorAll("textarea").forEach(autoResize);
+  }
+
+  // ===== PARTICIPANTES =====
+  let participantes = [];
+  function agregarParticipante() {
+    participantes.push({ nombre: "", cargo: "", organizacion: "" });
+    renderParticipantes();
+  }
+  function eliminarParticipante(i) {
+    participantes.splice(i, 1);
+    renderParticipantes();
+  }
+  function renderParticipantes() {
+    const tbody = document.getElementById("participantesBody");
+    tbody.innerHTML = "";
+    participantes.forEach((p, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="text" value="${escapeHtml(p.nombre)}" placeholder="Nombre"
+             oninput="participantes[${i}].nombre = this.value"></td>
+        <td><input type="text" value="${escapeHtml(p.cargo)}" placeholder="Cargo"
+             oninput="participantes[${i}].cargo = this.value"></td>
+        <td><input type="text" value="${escapeHtml(p.organizacion)}" placeholder="Organización"
+             oninput="participantes[${i}].organizacion = this.value"></td>
+        <td style="text-align:center;"><button class="danger" onclick="eliminarParticipante(${i})">✕</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ===== ACUERDOS =====
+  let acuerdos = [];
+  function agregarAcuerdo() {
+    acuerdos.push({ que: "", quien: "", cuando: "" });
+    renderAcuerdos();
+  }
+  function eliminarAcuerdo(i) {
+    acuerdos.splice(i, 1);
+    renderAcuerdos();
+  }
+  function renderAcuerdos() {
+    const cont = document.getElementById("acuerdos");
+    cont.innerHTML = "";
+    acuerdos.forEach((a, i) => {
+      const div = document.createElement("div");
+      div.className = "acuerdo-item";
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong style="font-size:0.9em;">Acuerdo ${i+1}</strong>
+          <button class="danger" onclick="eliminarAcuerdo(${i})">✕</button>
+        </div>
+        <div class="row">
+          <div style="flex:2;">
+            <label>Qué se hará</label>
+            <input type="text" value="${escapeHtml(a.que)}" placeholder="Acción"
+                   oninput="acuerdos[${i}].que = this.value">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Quién</label>
+            <input type="text" value="${escapeHtml(a.quien)}" placeholder="Responsable"
+                   oninput="acuerdos[${i}].quien = this.value">
+          </div>
+          <div>
+            <label>Para cuándo</label>
+            <input type="text" value="${escapeHtml(a.cuando)}" placeholder="Fecha / plazo"
+                   oninput="acuerdos[${i}].cuando = this.value">
+          </div>
+        </div>
+      `;
+      cont.appendChild(div);
+    });
+  }
+
+  // ===== UTILIDADES =====
+  function escapeHtml(s) {
+    if (s === undefined || s === null) return "";
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+  function val(id) { return document.getElementById(id).value.trim(); }
+
+  // ===== ACTUALIZAR ACTA =====
+  function actualizarActa() {
+    const v = document.getElementById("vistaActa");
+    let html = "";
+
+    html += `<h3>Datos generales</h3>`;
+    html += `<table>
+      <tr><th>Organización / proceso</th><td>${escapeHtml(val("organizacion"))}</td></tr>
+      <tr><th>Nombre de la reunión</th><td>${escapeHtml(val("nombreReunion"))}</td></tr>
+      <tr><th>Fecha</th><td>${escapeHtml(val("fecha"))}</td></tr>
+      <tr><th>Hora</th><td>${escapeHtml(val("horaInicio"))} – ${escapeHtml(val("horaFin"))}</td></tr>
+      <tr><th>Lugar / plataforma</th><td>${escapeHtml(val("lugar"))}</td></tr>
+      <tr><th>Facilita</th><td>${escapeHtml(val("facilita"))}</td></tr>
+      <tr><th>Anota / relator(a)</th><td>${escapeHtml(val("relator"))}</td></tr>
+    </table>`;
+
+    html += `<h3>Objetivo de la reunión</h3>`;
+    html += `<p>${escapeHtml(val("objetivo")) || "—"}</p>`;
+
+    html += `<h3>Agenda de la reunión</h3>`;
+    const puntosAgendaVisibles = puntosAgenda.filter(p => p.trim() !== "");
+    if (puntosAgendaVisibles.length > 0) {
+      html += `<ol>`;
+      puntosAgendaVisibles.forEach(p => { html += `<li>${escapeHtml(p)}</li>`; });
+      html += `</ol>`;
+    }
+    if (val("agendaLibre")) {
+      html += `<p>${escapeHtml(val("agendaLibre"))}</p>`;
+    }
+    if (puntosAgendaVisibles.length === 0 && !val("agendaLibre")) html += `<p>—</p>`;
+
+    html += `<h3>Participantes</h3>`;
+    const partVisibles = participantes.filter(p => p.nombre.trim() !== "");
+    if (partVisibles.length > 0) {
+      html += `<table>
+        <thead><tr><th>Nombre</th><th>Cargo</th><th>Organización</th></tr></thead><tbody>`;
+      partVisibles.forEach(p => {
+        html += `<tr><td>${escapeHtml(p.nombre)}</td><td>${escapeHtml(p.cargo)}</td><td>${escapeHtml(p.organizacion)}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+    } else {
+      html += `<p>—</p>`;
+    }
+
+    html += `<h3>Desarrollo</h3>`;
+    let desarrolloMostrado = false;
+    puntosAgenda.forEach((p, i) => {
+      if (desarrolloPuntos[i] && desarrolloPuntos[i].trim() !== "") {
+        const titulo = p.trim() || `Punto ${i+1}`;
+        html += `<p><strong>${i+1}. ${escapeHtml(titulo)}</strong><br>${escapeHtml(desarrolloPuntos[i])}</p>`;
+        desarrolloMostrado = true;
+      }
+    });
+    if (val("desarrolloLibre")) {
+      html += `<p>${escapeHtml(val("desarrolloLibre"))}</p>`;
+      desarrolloMostrado = true;
+    }
+    if (!desarrolloMostrado) html += `<p>—</p>`;
+
+    html += `<h3>Acuerdos</h3>`;
+    const acVisibles = acuerdos.filter(a => a.que.trim() !== "");
+    if (acVisibles.length > 0) {
+      html += `<table>
+        <thead><tr><th>Qué</th><th>Quién</th><th>Para cuándo</th></tr></thead><tbody>`;
+      acVisibles.forEach(a => {
+        html += `<tr><td>${escapeHtml(a.que)}</td><td>${escapeHtml(a.quien)}</td><td>${escapeHtml(a.cuando)}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+    } else {
+      html += `<p>—</p>`;
+    }
+
+    html += `<h3>Pendientes</h3><p>${escapeHtml(val("pendientes")) || "—"}</p>`;
+
+    html += `<h3>Próxima reunión</h3>`;
+    html += `<table>
+      <tr><th>Fecha</th><td>${escapeHtml(val("proximaFecha"))}</td></tr>
+      <tr><th>Hora</th><td>${escapeHtml(val("proximaHora"))}</td></tr>
+      <tr><th>Lugar / plataforma</th><td>${escapeHtml(val("proximaLugar"))}</td></tr>
+    </table>`;
+
+    html += `<h3>Observaciones</h3><p>${escapeHtml(val("observaciones")) || "—"}</p>`;
+
+    v.innerHTML = html;
+    v.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // ===== COPIAR =====
+  function copiarActa() {
+    const texto = document.getElementById("vistaActa").innerText;
+    navigator.clipboard.writeText(texto).then(() => {
+      alert("Acta copiada al portapapeles.");
+    }).catch(() => {
+      alert("No se pudo copiar. Seleccione el texto manualmente.");
+    });
+  }
+
+  // ===== DESCARGAR TXT =====
+  function descargarTxt() {
+    const texto = document.getElementById("vistaActa").innerText;
+    const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const nombre = val("nombreReunion") || "acta";
+    a.href = url;
+    a.download = `acta_${nombre.replace(/\s+/g, "_")}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+
+  // ===== LIMPIAR =====
+  function limpiarTodo() {
+    if (!confirm("¿Seguro que desea limpiar todos los campos?")) return;
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    puntosAgenda = []; desarrolloPuntos = []; participantes = []; acuerdos = [];
+    renderAgenda(); renderDesarrollo(); renderParticipantes(); renderAcuerdos();
+    document.getElementById("vistaActa").innerHTML = "— La vista del acta aparecerá aquí —";
+  }
+
+
+  // ===== INICIALIZACIÓN =====
+  agregarPuntoAgenda();
+  agregarParticipante();
+  agregarAcuerdo();
+  
+  // Auto-resize inicial de todos los textareas
+  window.addEventListener("load", autoResizeAll);
+</script>
+</body>
+</html>

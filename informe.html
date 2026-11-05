@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de actividades</title>
+<style>
+:root{--green:#3498db;--olive:#34495e;--cream:#f5f6f8;--orange:#3498db;--ink:#2c3e50;--muted:#667085;--line:#e0e4e8;--surface:#ffffff;--soft:#eef2f5;--danger:#2471a3}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 "Segoe UI",Arial,sans-serif}
+header{background:#3498db;color:#ffffff;padding:38px 24px;border-bottom:6px solid #2471a3;text-align:center}
+header .eyebrow{color:#ffffff;text-transform:uppercase;letter-spacing:.12em;font-size:.82rem;font-weight:700}
+h1{font-size:clamp(2.4rem,5vw,3.5rem);line-height:1.15;margin:0;font-weight:750}
+header p{margin:.5rem 0 0}
+header .header-description{margin:12px 0 0;text-align:center;font-size:1rem;line-height:1.5;font-weight:400;color:#ffffff}
+main{max-width:1120px;margin:24px auto;padding:0 16px 48px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 3px 12px #2c3e500d}
+h2{font-size:1.35rem;color:var(--green);margin:0 0 14px}
+h3{font-size:1.08rem;margin:0;color:var(--green)}
+p{margin:.4rem 0}
+.muted{color:var(--muted);font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+label,.label{font-size:.91rem;font-weight:650}
+input,select,textarea{font:inherit;color:inherit;width:100%;border:1px solid #d0d7de;border-radius:8px;background:#ffffff;padding:10px 11px;min-height:43px}
+textarea{resize:vertical;min-height:88px}
+input:focus,select:focus,textarea:focus,button:focus-visible,summary:focus-visible{outline:3px solid #3498db40;outline-offset:2px}
+details.obligation{border:1px solid var(--line);border-radius:12px;margin:12px 0;background:#ffffff;overflow:hidden}
+details.obligation>summary{cursor:pointer;list-style:none;padding:16px;display:flex;align-items:center;gap:12px;font-weight:700;color:var(--green)}
+details.obligation>summary::-webkit-details-marker{display:none}
+details.obligation>summary:after{content:"＋";margin-left:auto;font-size:1.3rem;color:var(--olive)}
+details.obligation[open]>summary:after{content:"−"}
+.obligation-content{padding:0 16px 16px;max-width:none}
+.subbox{background:var(--soft);border-radius:10px;padding:14px;margin:12px 0}
+.statuses{display:grid;gap:8px;margin:8px 0 16px}
+.status-option{display:flex;gap:9px;align-items:flex-start;font-weight:400}
+.status-option input{width:auto;min-height:auto;margin-top:5px;accent-color:#3498db}
+.report-card,.repeat-card{border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0;background:#ffffff;max-width:none}
+.report-card{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.report-card>.card-top{grid-column:1/-1;margin-bottom:0}
+.report-card>.field{min-width:0;margin:0!important}
+.report-card textarea{min-height:110px}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.card-top strong{color:var(--green)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+button{font:inherit;font-weight:650;border:0;border-radius:9px;padding:10px 14px;cursor:pointer;background:var(--green);color:white}
+button:hover{filter:brightness(1.08)}
+button.secondary{background:transparent;border:1px solid var(--green);color:var(--green)}
+button.danger{background:transparent;color:var(--danger);border:1px solid #d0d7de;padding:6px 10px;font-size:.88rem}
+button.small{padding:7px 10px;font-size:.9rem}
+.notice{background:#eef2f5;border-left:4px solid #34495e;padding:14px;border-radius:8px}
+footer{max-width:1050px;margin:0 auto;padding:0 16px 30px;color:var(--muted);font-size:.88rem}
+@media(max-width:700px){.grid,.report-card{grid-template-columns:1fr}.report-card>.card-top{grid-column:auto}.panel{padding:16px}header{padding:30px 16px;text-align:center}.card-top{align-items:flex-start}}
+@media print{
+ body{background:#fff;font-size:11pt}
+ header{padding:18px;background:#fff;color:#000;border-bottom:2px solid #333}
+ header .eyebrow{color:#333}
+ main{max-width:none;margin:0;padding:0}
+ .panel{box-shadow:none;break-inside:auto;border:1px solid #999;padding:14px}
+ details.obligation,.report-card{break-inside:auto}
+ details.obligation:not([open])>.obligation-content{display:block}
+ .actions,.no-print,button{display:none!important}
+ input,select,textarea{border:0;border-bottom:1px solid #999;border-radius:0;background:#fff;padding:4px 0}
+ textarea{min-height:48px}
+ textarea.print-source-hidden{display:none!important}
+ .print-textarea-content{
+   display:block!important; min-height:48px; width:100%;
+   padding:4px 0; border-bottom:1px solid #999; background:#fff;
+   color:#000; white-space:pre-wrap; overflow-wrap:anywhere;
+   word-break:normal; line-height:1.45;
+ }
+ footer{padding:10px 0}
+}
+
+.narrative-report{background:#fff;padding:28px 34px;border:1px solid var(--line);border-radius:12px;line-height:1.7}.narrative-report h2{margin-top:28px;border-bottom:1px solid var(--line);padding-bottom:7px}.narrative-report h3{margin-top:22px;color:var(--olive)}.narrative-report h4{margin:14px 0 4px;color:var(--ink)}.narrative-report p{text-align:justify;margin:8px 0 14px}.narrative-report header{padding:0;background:transparent;color:var(--ink);border:0}.narrative-report header .eyebrow{color:var(--muted)}@media(max-width:640px){.narrative-report{padding:18px}}
+.data-review{margin:20px 0;padding:14px 18px;border-left:4px solid #34495e;background:#eef2f5;border-radius:8px}.data-review h3{margin-top:0;color:#34495e}.data-review li{margin:6px 0}.report-note{margin-top:28px!important;padding-top:10px;border-top:1px solid #ddd;color:#555;font-size:9.5pt}
+
+/* Ajustes de uso en celulares: formularios e informes */
+@media (max-width: 700px) {
+  html, body { max-width:100%; overflow-x:hidden; }
+  body { font-size:16px; }
+  .container, .wrap, .app, .app-shell, main, .main, .content, .page, .form-container, .report-container { width:100%!important; max-width:100%!important; margin-left:auto!important; margin-right:auto!important; }
+  main, .container, .wrap, .content, .page, .form-container { padding-left:12px!important; padding-right:12px!important; }
+  .grid, .form-grid, .two-col, .two-columns, .row, .columns, .dashboard-grid, .cards-grid { grid-template-columns:minmax(0,1fr)!important; }
+  [style*="grid-template-columns"] { grid-template-columns:minmax(0,1fr)!important; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { width:100%!important; max-width:100%!important; min-width:0!important; font-size:16px!important; }
+  textarea { min-height:100px; }
+  label { overflow-wrap:anywhere; }
+  button, .btn, input[type="button"], input[type="submit"] { max-width:100%; min-height:42px; white-space:normal; overflow-wrap:anywhere; }
+  .actions, .buttons, .toolbar, .form-actions, .report-actions, .button-row { display:flex!important; flex-wrap:wrap!important; gap:8px!important; }
+  .actions button, .buttons button, .toolbar button, .form-actions button, .report-actions button, .button-row button { flex:1 1 140px; }
+  table { display:block; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .card, .panel, .section, .obligation, .obligation-card, fieldset { min-width:0!important; max-width:100%!important; }
+  h1 { font-size:clamp(1.45rem,6vw,2rem)!important; line-height:1.2; }
+  h2 { font-size:clamp(1.2rem,5vw,1.55rem)!important; }
+  .modal, .dialog, .develop-modal { width:100%!important; max-width:100%!important; margin:0!important; }
+  img, svg, canvas { max-width:100%; height:auto; }
+}
+@media (max-width: 380px) {
+  main, .container, .wrap, .content, .page, .form-container { padding-left:8px!important; padding-right:8px!important; }
+  .card, .panel, fieldset { padding:10px!important; }
+  button, .btn { font-size:14px!important; }
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>Informe de actividades</h1>
+  <p class="header-description">Formato adaptable para que cualquier organización registre y dé seguimiento a sus compromisos, actividades, resultados y productos.</p>
+</header>
+<main>
+<form id="reportForm">
+  <section class="panel" aria-labelledby="general-title">
+    <h2 id="general-title">1. Información general</h2>
+    <div class="grid">
+      <div class="field"><label for="nombreOrganizacion">Nombre de la organización</label><input id="nombreOrganizacion" name="nombreOrganizacion" autocomplete="organization" placeholder="Escriba el nombre de la organización"></div>
+      <div class="field"><label for="nombre">Nombre</label><input id="nombre" name="nombre" autocomplete="name" placeholder="Escriba el nombre completo"></div>
+      <div class="field"><label for="cargo">Cargo o función</label><input id="cargo" name="cargo" placeholder="Escriba el cargo o función"></div>
+      <div class="field"><label for="periodo">Período reportado (mes y año)</label><select id="periodo" name="periodo"></select></div>
+      <div class="field"><label for="fechaPresentacion">Fecha de presentación del informe</label><input type="date" id="fechaPresentacion" name="fechaPresentacion"></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="obligaciones-title">
+    <h2 id="obligaciones-title">2. Estado de las obligaciones contractuales</h2>
+    <p class="muted">Abra cada obligación para registrar su estado. En cada reporte puede indicar la fecha, la actividad, los productos obtenidos y qué quedó pendiente o qué dificultades surgieron. Puede añadir varios reportes por obligación.</p>
+    <div class="actions no-print" style="margin:0 0 14px"><button type="button" id="addObligationButton">＋ Añadir obligación contractual</button></div>
+    <div id="addObligationPanel" class="panel no-print" hidden style="margin:0 0 14px;padding:14px"><label for="newObligationTitle"><strong>Nombre de la nueva obligación contractual</strong></label><input id="newObligationTitle" type="text" placeholder="Escriba la obligación contractual" style="width:100%;margin:8px 0 12px"><label for="newObligationDescription"><strong>Descripción de la obligación</strong></label><textarea id="newObligationDescription" rows="3" placeholder="Describa brevemente lo que implica esta obligación" style="width:100%;margin:8px 0 12px"></textarea><div class="actions"><button type="button" id="confirmAddObligationButton">Guardar obligación</button><button type="button" class="secondary" id="cancelAddObligationButton">Cancelar</button></div></div><p class="muted">Puede crear las obligaciones que correspondan a su contrato, eliminarlas si ya no las necesita y registrar las actividades de cada una con los mismos campos del formulario.</p><div id="obligations"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="projection-title">
+    <h2 id="projection-title">3. Proyección del mes siguiente</h2>
+    <p class="muted">Describa en un solo espacio lo que proyecta realizar el próximo mes, incluyendo las prioridades o actividades que considere necesarias.</p>
+    <div class="field"><label for="proyeccionMesSiguiente">¿Qué proyecto realizar el próximo mes?</label><textarea id="proyeccionMesSiguiente" name="proyeccionMesSiguiente" rows="6" placeholder="Redacte aquí las actividades, prioridades y resultados que espera desarrollar el próximo mes."></textarea></div>
+  </section>
+
+  <section class="panel" aria-labelledby="approval-title">
+    <h2 id="approval-title">4. Revisión y aprobación</h2>
+    <div class="grid">
+      <div class="field"><label for="nombreFirma">Nombre del técnico o técnica</label><input id="nombreFirma" readonly placeholder="Se completa con el punto 1"></div>
+      <div class="field"><label>Firma del técnico o técnica</label><div class="notice">Espacio reservado para firma manuscrita o digital.</div></div>
+      <div class="field"><label for="revisor">Nombre de quien revisa o aprueba</label><input id="revisor" name="revisor" placeholder="Escriba el nombre completo"></div>
+      <div class="field"><label for="fechaRevision">Fecha de revisión</label><input type="date" id="fechaRevision" name="fechaRevision"></div>
+      <div class="field"><label>Firma de quien revisa o aprueba</label><div class="notice">Espacio reservado para firma manuscrita o digital.</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Guardar, exportar o imprimir</h2>
+    <p class="muted">Los datos se guardan en el almacenamiento local de este navegador cuando se modifica el formulario. Use exportar para descargar una copia JSON de los datos o imprimir/guardar como PDF.</p>
+    <div class="actions no-print">
+      <button type="button" class="secondary" id="exportButton">Exportar datos (JSON)</button>
+      <button type="button" class="secondary" id="printButton">Imprimir / Guardar como PDF</button>
+      <button type="button" class="secondary" id="viewConsolidatedButton">Ver información consolidada</button>
+      <button type="button" class="secondary" id="importButton">Importar datos (JSON)</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+      <button type="button" class="danger" id="clearButton">Limpiar formulario</button>
+    </div>
+    <p id="feedback" class="muted" role="status" aria-live="polite"></p>
+  </section>
+</form>
+<section class="panel" id="consolidatedView" hidden><div class="actions no-print"><button type="button" class="secondary" id="backToFormButton">Volver al formulario</button><button type="button" id="printConsolidatedButton">Imprimir / Guardar como PDF</button><button type="button" id="downloadWordButton">Descargar reporte en Word</button></div><div id="consolidatedContent"></div></section>
+</main>
+<footer>Formulario editable para el seguimiento mensual de las obligaciones contractuales. Revise la información antes de presentar el informe.</footer>
+
+<script>
+"use strict";
+let FUNCTIONS = [];
+/* CUSTOM_OBLIGATIONS_MODE */
+
+const STORAGE_KEY = "herramientaInformeMensualOrganizaciones_v1";
+const $ = id => document.getElementById(id);
+const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const obligationOptions = () => `<option value="">Seleccione una obligación</option>` + FUNCTIONS.map(f=>`<option value="${f.id}">${escapeHTMLConsolidated(f.title)}</option>`).join("");
+function field(label, name, value="", type="text", placeholder="", extra="") {
+ const id = `${name}-${Math.random().toString(36).slice(2,9)}`;
+ if(type==="textarea") return `<div class="field"><label for="${id}">${label}</label><textarea id="${id}" data-field="${name}" placeholder="${escapeHTMLConsolidated(placeholder)}" ${extra}>${escapeHTMLConsolidated(value)}</textarea></div>`;
+ if(type==="select") return `<div class="field"><label for="${id}">${label}</label><select id="${id}" data-field="${name}" ${extra}>${obligationOptions()}</select></div>`;
+ return `<div class="field"><label for="${id}">${label}</label><input id="${id}" data-field="${name}" type="${type}" value="${escapeHTMLConsolidated(value)}" placeholder="${escapeHTMLConsolidated(placeholder)}" ${extra}></div>`;
+}
+function renderObligations(data={}) {
+ $("obligations").innerHTML = FUNCTIONS.map(f=>{
+   const item = data[f.id] || {status:"",reports:[blankReport()]};
+   const reports = item.reports?.length ? item.reports : [blankReport()];
+   return `<details class="obligation" open data-obligation="${f.id}">
+    <summary>${escapeHTMLConsolidated(f.title)}</summary>
+    <div class="obligation-content"><div class="actions no-print" style="justify-content:flex-end"><button type="button" class="danger remove-obligation" data-id="${f.id}">Eliminar obligación</button></div>
+      <div class="field" style="margin:12px 0"><label for="description-${f.id}"><strong>Descripción de la obligación contractual</strong></label><textarea id="description-${f.id}" data-obligation-description="${f.id}" rows="3" placeholder="Describa el alcance o las tareas que comprende esta obligación">${escapeHTMLConsolidated(item.description ?? f.description ?? "")}</textarea></div>
+      <h3>Actividades y productos reportados por actividad</h3>
+      <div class="reports">${reports.map((r,i)=>reportHTML(f.id,r,i)).join("")}</div>
+      <div class="actions no-print"><button type="button" class="secondary add-report" data-id="${f.id}">＋ Añadir otra actividad a esta obligación</button></div>
+    </div>
+   </details>`;
+ }).join("");
+}
+function radio(id,value,label,selected) {
+ return `<label class="status-option"><input type="radio" name="status-${id}" value="${value}" ${selected===value?"checked":""}> <span>${escapeHTMLConsolidated(label)}</span></label>`;
+}
+function blankReport(){return {aportaPlan:"",noAporteDetalle:"",fecha:"",actividad:"",resultadoAvance:"",productos:"",ubicacionEvidencia:"",pendienteDificultad:"",estadoActividad:""}}
+function reportHTML(id,r,i) {
+ const aportaPlan=r.aportaPlan||"";
+ return `<div class="report-card" data-report-index="${i}">
+   <div class="card-top"><strong>Actividad ${i+1}</strong>${i>0?`<button type="button" class="danger remove-report no-print" data-id="${id}" data-index="${i}">Eliminar</button>`:""}</div>
+   <div class="field" style="margin-bottom:12px"><label>¿Esta actividad aporta al cumplimiento o avance del plan de trabajo?</label><select data-field="aportaPlan"><option value="" ${aportaPlan===""?"selected":""}>Seleccione una opción</option><option value="si" ${aportaPlan==="si"?"selected":""}>Sí</option><option value="no" ${aportaPlan==="no"?"selected":""}>No</option></select></div>
+   <div class="field no-aporte-detalle" style="margin-bottom:12px;${aportaPlan==="no"?"":"display:none"}"><label>Si la respuesta es no, especifique:</label><textarea data-field="noAporteDetalle" placeholder="Explique por qué esta actividad no aporta al cumplimiento o avance del plan de trabajo.">${escapeHTMLConsolidated(r.noAporteDetalle||"")}</textarea></div>
+   <div class="field">${field("Fecha de realización","fecha",r.fecha,"date")}</div>
+   <div class="field" style="margin-top:12px">${field("Actividad desarrollada","actividad",r.actividad,"textarea","Describa la actividad realizada")}</div>
+   <div class="field" style="margin-top:12px">${field("Resultado o avance alcanzado","resultadoAvance",r.resultadoAvance,"textarea","Describa el resultado o avance alcanzado")}</div>
+   <div class="field" style="margin-top:12px">${field("Productos obtenidos","productos",r.productos,"textarea","Registre los productos o resultados obtenidos en esta actividad")}</div>
+   <div class="field" style="margin-top:12px">${field("Ubicación de evidencia o de soporte","ubicacionEvidencia",r.ubicacionEvidencia,"textarea","Nombre del archivo, enlace u ubicación física")}</div>
+   <div class="field" style="margin-top:12px">${field("¿Quedó algo pendiente, surgieron dificultades o tiene alguna recomendación?","pendienteDificultad",r.pendienteDificultad||r.pendientes||r.dificultades||"","textarea","Describa qué hizo falta, qué quedó pendiente o qué dificultad se presentó. Si no hay nada pendiente, puede indicarlo aquí.")}</div>
+   <div class="field" style="margin-top:12px"><label>Estado de la actividad</label><select data-field="estadoActividad"><option value="" ${!r.estadoActividad?"selected":""}>Seleccione un nivel</option><option value="No iniciada" ${r.estadoActividad==="No iniciada"?"selected":""}>1. No iniciada</option><option value="En etapa inicial" ${r.estadoActividad==="En etapa inicial"?"selected":""}>2. En etapa inicial</option><option value="En desarrollo" ${r.estadoActividad==="En desarrollo"?"selected":""}>3. En desarrollo</option><option value="Avance significativo" ${r.estadoActividad==="Avance significativo"?"selected":""}>4. Avance significativo</option><option value="Completada" ${r.estadoActividad==="Completada"?"selected":""}>5. Completada</option></select></div>
+  </div>`;
+}
+function blankProjection(){return ""}
+function fillMonths() {
+ const sel=$("periodo");
+ const names=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+ let options="";
+ for(let y=2026;y<=2027;y++) for(let m=0;m<12;m++) options+=`<option value="${y}-${String(m+1).padStart(2,"0")}">${names[m]} ${y}</option>`;
+ sel.innerHTML=options;sel.value="2026-10";
+}
+function collectData() {
+ const obligations={};
+ FUNCTIONS.forEach(f=>{
+   const root=document.querySelector(`[data-obligation="${f.id}"]`);
+   if(!root){obligations[f.id]={title:f.title,description:f.description||"",status:"",reports:[]};return;}
+   obligations[f.id]={
+    title:f.title,
+    description:root.querySelector(`[data-obligation-description="${f.id}"]`)?.value||"",
+    status:root.querySelector(`input[name="status-${f.id}"]:checked`)?.value||"",
+    reports:[...root.querySelectorAll(".report-card")].map(card=>({
+      aportaPlan:card.querySelector('[data-field="aportaPlan"]').value,
+      noAporteDetalle:card.querySelector('[data-field="noAporteDetalle"]').value,
+      fecha:card.querySelector('[data-field="fecha"]').value,
+      actividad:card.querySelector('[data-field="actividad"]').value,
+      resultadoAvance:card.querySelector('[data-field="resultadoAvance"]').value,
+      productos:card.querySelector('[data-field="productos"]').value,
+      ubicacionEvidencia:card.querySelector('[data-field="ubicacionEvidencia"]').value,
+      pendienteDificultad:card.querySelector('[data-field="pendienteDificultad"]').value,
+      estadoActividad:card.querySelector('[data-field="estadoActividad"]').value
+    }))
+   };
+ });
+ return {
+  informacionGeneral:{nombreOrganizacion:$("nombreOrganizacion").value,nombre:$("nombre").value,cargo:$("cargo").value,periodo:$("periodo").value,fechaPresentacion:$("fechaPresentacion").value},
+  obligaciones: obligations,
+  obligations: obligations,
+  proyeccionMesSiguiente:$("proyeccionMesSiguiente").value,
+  revisionAprobacion:{nombreTecnico:$("nombre").value,revisor:$("revisor").value,fechaRevision:$("fechaRevision").value}
+ };
+}
+function applyData(data) {
+ const g=data.informacionGeneral||{};
+ $("nombreOrganizacion").value=g.nombreOrganizacion||g.organizacion||"";$("nombre").value=g.nombre||"";$("cargo").value=g.cargo||"";$("periodo").value=g.periodo||"2026-10";$("fechaPresentacion").value=g.fechaPresentacion||"";$("nombreFirma").value=g.nombre||"";
+  const obligationData={};
+  const sourceObligations=data.obligaciones||data.obligations||data.obligacionesContractuales||{};
+  FUNCTIONS = Object.entries(sourceObligations).map(([id,old],index)=>({id, title:old.title||`Obligación contractual ${index+1}`, description:old.description||"", indicators:old.indicators||""}));
+  FUNCTIONS.forEach(f=>{const old=sourceObligations[f.id]||{};obligationData[f.id]={description:old.description||f.description||"",status:old.status||"",reports:(old.reports||[]).length?old.reports.map(r=>({...blankReport(),...r,pendienteDificultad:r.pendienteDificultad||r.pendientes||r.dificultades||""})):[blankReport()]};});
+  renderObligations(obligationData);
+ const projection=data.proyeccionMesSiguiente;
+ if(typeof projection==="string") $("proyeccionMesSiguiente").value=projection;
+ else if(Array.isArray(projection)) $("proyeccionMesSiguiente").value=projection.map(p=>[p.tematica,p.actividad,p.producto,p.fecha].filter(Boolean).join(" — ")).filter(Boolean).join("\n\n");
+ else $("proyeccionMesSiguiente").value="";
+ $("revisor").value=data.revisionAprobacion?.revisor||"";$("fechaRevision").value=data.revisionAprobacion?.fechaRevision||"";
+}
+function showFeedback(msg){$("feedback").textContent=msg}
+function saveLocal(show=true) {
+ try {localStorage.setItem(STORAGE_KEY,JSON.stringify(collectData()));if(show)showFeedback("Datos guardados en este navegador.");return true;}
+ catch(e){showFeedback("No se pudo guardar localmente. Exporte los datos como archivo JSON para conservarlos.");return false;}
+}
+$("nombre").addEventListener("input",()=>{$("nombreFirma").value=$("nombre").value;saveLocal(false)});
+$("reportForm").addEventListener("input",e=>{if(e.target.id!=="nombre")saveLocal(false)});
+$("reportForm").addEventListener("change",e=>{if(e.target.matches('[data-field="aportaPlan"]')){const card=e.target.closest(".report-card");const detail=card.querySelector(".no-aporte-detalle");detail.style.display=e.target.value==="no"?"flex":"none";}saveLocal(false);});
+function addCustomObligation(title, description){
+ const clean=String(title||"").trim(); const cleanDescription=String(description||"").trim(); if(!clean)return;
+ const id="ob_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7);
+ FUNCTIONS.push({id,title:clean,description:cleanDescription,indicators:""});
+ const current=collectData();
+ current.obligaciones[id]={title:clean,description:cleanDescription,status:"",reports:[blankReport()]};
+ renderObligations(current.obligaciones);
+ saveLocal(false);
+ const node=document.querySelector(`[data-obligation="${id}"]`); if(node)node.scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("addObligationButton").addEventListener("click",()=>{
+ const panel=$("addObligationPanel");
+ panel.hidden=false;
+ $("newObligationTitle").focus();
+});
+$("confirmAddObligationButton").addEventListener("click",()=>{
+ const input=$("newObligationTitle");
+ const title=input.value.trim();
+ if(!title){showFeedback("Escriba el nombre de la obligación para añadirla.");input.focus();return;}
+ const description=$("newObligationDescription").value.trim();
+ addCustomObligation(title,description);
+ input.value=""; $("newObligationDescription").value="";
+ $("addObligationPanel").hidden=true;
+ showFeedback("Obligación contractual añadida. Ya puede registrar sus actividades.");
+});
+$("newObligationTitle").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("confirmAddObligationButton").click();}});
+$("cancelAddObligationButton").addEventListener("click",()=>{$("addObligationPanel").hidden=true;$("newObligationTitle").value="";$("newObligationDescription").value="";});
+$("obligations").addEventListener("click",e=>{
+ const removeOb=e.target.closest("button.remove-obligation");
+ if(removeOb){
+  e.preventDefault();
+  e.stopPropagation();
+  const id=removeOb.dataset.id;
+  if(!id || !FUNCTIONS.some(f=>f.id===id))return;
+  if(!confirm("¿Desea eliminar esta obligación y todas las actividades registradas en ella?"))return;
+  const current=collectData();
+  delete current.obligaciones[id];
+  FUNCTIONS=FUNCTIONS.filter(f=>f.id!==id);
+  renderObligations(current.obligaciones);
+  saveLocal(false);
+  showFeedback("Obligación eliminada junto con sus actividades registradas.");
+  return;
+ }
+
+ const add=e.target.closest(".add-report");
+ if(add){
+   e.preventDefault();
+   const id=add.dataset.id;
+   const obligation=add.closest(".obligation");
+   const reportsContainer=obligation && obligation.querySelector(".reports");
+   if(!obligation || !reportsContainer || !FUNCTIONS.some(f=>f.id===id)) return;
+   const index=reportsContainer.querySelectorAll(".report-card").length;
+   reportsContainer.insertAdjacentHTML("beforeend",reportHTML(id,blankReport(),index));
+   obligation.open=true;
+   saveLocal(false);
+   const cards=reportsContainer.querySelectorAll(".report-card");
+   if(cards[index]) cards[index].scrollIntoView({behavior:"smooth",block:"start"});
+   return;
+ }
+ const remove=e.target.closest(".remove-report");
+ if(remove){
+   e.preventDefault();
+   const id=remove.dataset.id;
+   const obligation=remove.closest(".obligation");
+   const card=remove.closest(".report-card");
+   const reportsContainer=obligation && obligation.querySelector(".reports");
+   if(!obligation || !card || !reportsContainer || reportsContainer.querySelectorAll(".report-card").length<=1) return;
+   card.remove();
+   [...reportsContainer.querySelectorAll(".report-card")].forEach((report,index)=>{
+     report.dataset.reportIndex=String(index);
+     const heading=report.querySelector(".card-top strong");
+     if(heading) heading.textContent=`Actividad ${index+1}`;
+     const removeButton=report.querySelector(".remove-report");
+     if(removeButton){removeButton.dataset.index=String(index);removeButton.dataset.id=id;}
+   });
+   obligation.open=true;
+   saveLocal(false);
+ }
+});
+function downloadFileFromParent(filename, blob){
+ const safeName=String(filename||"archivo").replace(/[\\/:*?"<>|]+/g,"_");
+ let url="";
+ try {
+  url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=safeName;a.rel="noopener";a.style.display="none";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(e){}},60000);
+  return true;
+ } catch(err) {
+  console.error("Error al iniciar la descarga",err);
+  if(url){try{window.open(url,"_blank","noopener")}catch(e){} window.setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(e){}},60000);}
+  return false;
+ }
+}
+
+$("exportButton").addEventListener("click",()=>{
+ try {
+  const data=collectData();
+  if(!data || !data.informacionGeneral || !data.obligaciones || typeof data.obligaciones !== "object") {
+   throw new Error("Los datos del formulario no tienen la estructura esperada");
+  }
+  data.obligations = data.obligaciones;
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json;charset=utf-8"});
+  const safeName=($("nombre").value.trim()||"tecnico").replace(/[^a-z0-9_-]+/gi,"_");
+  const period=$("periodo").value||"periodo";
+  if(!downloadFileFromParent(`informe_mensual_actividades_${safeName}_${period}.json`,blob)) throw new Error("No se pudo iniciar la descarga");
+  showFeedback("Se inició la descarga del archivo JSON. Revise la carpeta de descargas del navegador.");
+ } catch(err) { console.error("Error al exportar JSON",err); showFeedback("No fue posible descargar el JSON: "+(err?.message||"error desconocido")+". Inténtelo de nuevo."); }
+});
+// Preparar los campos extensos como texto imprimible real.
+ // Los textarea son controles de una sola caja y algunos navegadores recortan
+ // su contenido al imprimir. Se sustituyen temporalmente por bloques de texto
+ // que sí pueden continuar entre páginas.
+ function prepareTextareasForPrint(){
+  document.querySelectorAll("textarea").forEach(textarea=>{
+   if(textarea.closest("[hidden]") || textarea.classList.contains("print-source-hidden")) return;
+   const printable=document.createElement("div");
+   printable.className="print-textarea-content";
+   printable.textContent=textarea.value || "";
+   printable.setAttribute("aria-hidden","true");
+   textarea.classList.add("print-source-hidden");
+   textarea.insertAdjacentElement("afterend",printable);
+  });
+ }
+ function restoreTextareasAfterPrint(){
+  document.querySelectorAll(".print-textarea-content").forEach(node=>node.remove());
+  document.querySelectorAll("textarea.print-source-hidden").forEach(node=>node.classList.remove("print-source-hidden"));
+ }
+ window.addEventListener("beforeprint",prepareTextareasForPrint);
+ window.addEventListener("afterprint",restoreTextareasAfterPrint);
+ $("printButton").addEventListener("click",()=>window.print());
+$("importButton").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ try{
+  const rawText = file.text ? await file.text() : await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||""));reader.onerror=()=>reject(new Error("No se pudo leer el archivo"));reader.readAsText(file,"UTF-8");});
+  const data=JSON.parse(rawText.replace(/^\uFEFF/,""));
+  if(!data||typeof data!=="object"||Array.isArray(data))throw new Error("Formato no reconocido");
+  if(!data.informacionGeneral) data.informacionGeneral=data.general||data.informacion_general||{};
+  if(!data.informacionGeneral||typeof data.informacionGeneral!=="object")throw new Error("Falta información general");
+  data.obligaciones=data.obligaciones||data.obligations||{};
+  if(!data.obligaciones || typeof data.obligaciones !== "object" || Array.isArray(data.obligaciones)) throw new Error("La sección de obligaciones no tiene un formato válido");
+  data.obligations=data.obligaciones;
+  applyData(data);
+  const stored=saveLocal(false);
+  showFeedback(stored?"Datos importados correctamente y guardados automáticamente en este navegador.":"Datos importados al formulario. No fue posible guardarlos automáticamente; exporte una copia JSON.");
+ } catch(err){showFeedback("No se pudo importar el archivo. Seleccione un archivo JSON exportado desde este formulario y compruebe que no esté dañado.");}
+ e.target.value="";
+});
+function escapeHTMLConsolidated(value){return String(value??"").replace(/[&<>\"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;", "'":"&#39;"}[ch]));}
+function reportValue(value){return String(value??"").trim();}
+function formatReportDate(value){
+ const raw=String(value??"").trim();
+ if(!raw)return "";
+ const m=raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+ if(!m)return raw;
+ const months=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+ const month=Number(m[2]);
+ if(month<1||month>12)return raw;
+ return `${Number(m[3])} de ${months[month-1]} de ${m[1]}`;
+}
+function cleanSentence(value){
+ let s=String(value??"").replace(/\s+/g," ").trim();
+ if(!s)return "";
+ s=s.replace(/^[,;:\s]+/,"");
+ return s;
+}
+function sentence(value){
+ const s=cleanSentence(value);
+ if(!s)return "";
+ return /[.!?…]$/.test(s)?s:s+".";
+}
+function lowerInitial(value){
+ const s=cleanSentence(value);
+ return s?s.charAt(0).toLocaleLowerCase("es")+s.slice(1):"";
+}
+function textBlock(value){
+ return String(value??"").split(/\n+/).map(x=>cleanSentence(x)).filter(Boolean).map(x=>`<p>${escapeHTMLConsolidated(sentence(x))}</p>`).join("");
+}
+function renderConsolidated(){
+ try {
+  const data=collectData();
+  const g=data.informacionGeneral||{};
+  const obligations=data.obligaciones||data.obligations||{};
+  const content=$("consolidatedContent");
+  if(!Array.isArray(FUNCTIONS)||!content)throw new Error("No se encontró la estructura del reporte");
+  const organizacion=reportValue(g.nombreOrganizacion), nombre=reportValue(g.nombre), cargo=reportValue(g.cargo), periodo=reportValue(g.periodo), fechaPresentacion=formatReportDate(g.fechaPresentacion);
+  let html=`<header><div class="eyebrow">Informe de gestión organizativa</div><h1>Informe mensual de actividades</h1>${organizacion?`<p><strong>${escapeHTMLConsolidated(organizacion)}</strong></p>`:""}<p>Consolidado narrativo de las actividades y avances reportados.</p></header><article class="narrative-report">`;
+  html+='<h2>1. Información general</h2><p>';
+  html+=organizacion?`La organización que presenta este informe es <strong>${escapeHTMLConsolidated(organizacion)}</strong>. `:'';
+  html+=nombre?`El presente informe corresponde a <strong>${escapeHTMLConsolidated(nombre)}</strong>`:'El presente informe';
+  if(cargo)html+=` quien desempeña el cargo o función de <strong>${escapeHTMLConsolidated(cargo)}</strong>`;
+  if(periodo)html+=`. El período reportado es <strong>${escapeHTMLConsolidated(periodo)}</strong>`;
+  if(fechaPresentacion)html+=` y fue presentado el <strong>${escapeHTMLConsolidated(fechaPresentacion)}</strong>`;
+  html+='.</p><h2>2. Desarrollo de las obligaciones contractuales</h2>';
+  let includedObligations=0, activityCount=0;
+  const dateWarnings=[];
+  const presentationDate=reportValue(g.fechaPresentacion);
+  FUNCTIONS.forEach(f=>{
+   const ob=(obligations&&typeof obligations==="object"?obligations[f.id]:{})||{};
+   const reports=(Array.isArray(ob.reports)?ob.reports:[]).filter(r=>String(r?.actividad||"").trim()!=="");
+   if(!reports.length)return;
+   includedObligations++;
+   html+=`<h3>${escapeHTMLConsolidated(f.title.replace(/^\d+\.\s*/,""))}</h3>`;
+   if(String(ob.status||"").trim())html+=`<p><strong>Estado de la obligación:</strong> ${escapeHTMLConsolidated(ob.status)}.</p>`;
+   reports.forEach((r,i)=>{
+    activityCount++;
+    const fechaRaw=reportValue(r.fecha), fecha=formatReportDate(fechaRaw);
+    if(fechaRaw&&presentationDate&&/^\d{4}-\d{2}-\d{2}$/.test(fechaRaw)&&/^\d{4}-\d{2}-\d{2}$/.test(presentationDate)&&fechaRaw>presentationDate){
+      dateWarnings.push(`La actividad «${cleanSentence(r.actividad)}» tiene fecha ${fecha}, posterior a la fecha de presentación del informe (${formatReportDate(presentationDate)}).`);
+    }
+    const actividad=cleanSentence(r.actividad), resultado=cleanSentence(r.resultadoAvance), productos=cleanSentence(r.productos), evidencia=cleanSentence(r.ubicacionEvidencia), pendiente=cleanSentence(r.pendienteDificultad), aporta=String(r.aportaPlan??"").trim().toLowerCase(), detallePlan=cleanSentence(r.noAporteDetalle), estado=cleanSentence(r.estadoActividad);
+    html+=`<h4>${reports.length>1?`Actividad ${i+1}`:"Actividad reportada"}</h4>`;
+    let narrative="";
+    if(fecha)narrative+=`El ${escapeHTMLConsolidated(fecha)}, `;
+    narrative+=escapeHTMLConsolidated(lowerInitial(actividad));
+    if(!/[.!?…]$/.test(actividad))narrative+='.';
+    if(aporta==="si")narrative+=' Esta acción se vincula con el plan de trabajo.';
+    else if(aporta==="no"){
+      narrative+=' En el registro se indicó que esta acción no se vincula directamente con el plan de trabajo.';
+      if(detallePlan)narrative+=` ${escapeHTMLConsolidated(sentence(detallePlan))}`;
+    }
+    if(resultado)narrative+=` En cuanto a los avances, ${escapeHTMLConsolidated(lowerInitial(resultado))}${/[.!?…]$/.test(resultado)?"":"."}`;
+    if(productos)narrative+=` Como productos de este trabajo, se reportan: ${escapeHTMLConsolidated(sentence(productos))}`;
+    if(evidencia)narrative+=` La evidencia correspondiente se encuentra en ${escapeHTMLConsolidated(evidencia.replace(/[.\s]+$/,""))}.`;
+    if(estado)narrative+=` El estado registrado para esta actividad es <strong>${escapeHTMLConsolidated(estado.toLocaleLowerCase("es"))}</strong>.`;
+    html+=`<p>${narrative}</p>`;
+    if(pendiente)html+=`<p><strong>Continuidad y aspectos pendientes:</strong> ${escapeHTMLConsolidated(sentence(pendiente))}</p>`;
+   });
+  });
+  if(!includedObligations)html+='<p>No se registraron actividades para las obligaciones contractuales durante este período.</p>';
+  if(dateWarnings.length){
+   html+='<section class="data-review"><h3>Observaciones para verificar antes de aprobar el informe</h3><p>Se identificaron fechas de actividades posteriores a la fecha de presentación. Se conservan tal como fueron registradas y se recomienda verificarlas.</p><ul>';
+   dateWarnings.forEach(w=>html+=`<li>${escapeHTMLConsolidated(w)}</li>`);
+   html+='</ul></section>';
+  }
+  html+='<h2>3. Proyección para el mes siguiente</h2>';
+  const projection=reportValue(data.proyeccionMesSiguiente);
+  html+=projection?textBlock(projection):'<p>No se registró una proyección para el siguiente período.</p>';
+  html+='<h2>4. Revisión y aprobación</h2>';
+  const reviewer=reportValue(data.revisionAprobacion?.revisor), reviewDate=formatReportDate(data.revisionAprobacion?.fechaRevision);
+  if(reviewer||reviewDate){
+   html+='<p>';
+   if(reviewer)html+=`La revisión o aprobación estará a cargo de <strong>${escapeHTMLConsolidated(reviewer)}</strong>`;
+   if(reviewer&&reviewDate)html+='; la fecha de revisión registrada es ';
+   else if(reviewDate)html+='Fecha de revisión registrada: ';
+   if(reviewDate)html+=`<strong>${escapeHTMLConsolidated(reviewDate)}</strong>`;
+   html+='.</p>';
+  } else html+='<p>Los datos de revisión y aprobación están pendientes de completar.</p>';
+  html+=`<p class="report-note">El presente documento organiza narrativamente la información consignada en el formulario. Las cifras, fechas y resultados deben ser revisados por la persona responsable antes de su aprobación.</p></article>`;
+  content.innerHTML=html;
+  $("reportForm").hidden=true;$("reportForm").style.display="none";
+  $("consolidatedView").hidden=false;$("consolidatedView").style.display="block";
+  $("consolidatedView").scrollIntoView({behavior:"smooth",block:"start"});
+  showFeedback(`Reporte consolidado generado. Se incluyeron ${activityCount} actividad(es). Revise las observaciones antes de aprobarlo.`);
+ } catch(err){console.error("Error al generar reporte consolidado",err);showFeedback("No se pudo generar el reporte consolidado: "+(err?.message||"error desconocido"));}
+}
+function downloadConsolidatedWord(){
+ // Construir el reporte sin depender de que la vista se haya abierto previamente.
+ renderConsolidated();
+ const report=$("consolidatedContent").innerHTML;
+ if(!report.trim()) throw new Error("El reporte está vacío; primero revise los datos del formulario.");
+ const wordHtml=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Informe mensual de actividades</title><style>body{font-family:Arial,sans-serif;color:#222;line-height:1.55;font-size:11pt}h1{font-size:20pt;color:#3498db}h2{font-size:15pt;color:#3498db;margin-top:22pt;border-bottom:1px solid #bbb;padding-bottom:5pt}h3{font-size:12.5pt;color:#34495e;margin-top:17pt}h4{font-size:11pt;margin-top:12pt}p{margin:7pt 0;text-align:justify}.eyebrow{font-size:9pt;color:#555;text-transform:uppercase;letter-spacing:1px}header{margin-bottom:20pt}</style></head><body>${report}</body></html>`;
+ const blob=new Blob(["\ufeff",wordHtml],{type:"application/msword;charset=utf-8"});
+ const name=($("nombre").value.trim()||"tecnico").replace(/[^a-z0-9_-]+/gi,"_");
+ const organization=$("nombreOrganizacion").value.trim().replace(/[^a-z0-9_-]+/gi,"_");
+ const period=$("periodo").value||"periodo";
+ const organizationPart=organization?`${organization}_`:"";
+ if(!downloadFileFromParent(`informe_mensual_actividades_${organizationPart}${name}_${period}.doc`,blob)) showFeedback("No se pudo iniciar la descarga de Word. Revise los permisos de descarga del navegador.");
+}
+$("viewConsolidatedButton").addEventListener("click",renderConsolidated);
+$("backToFormButton").addEventListener("click",()=>{$("consolidatedView").hidden=true;$("consolidatedView").style.display="none";$("reportForm").hidden=false;$("reportForm").style.display="block";$("reportForm").scrollIntoView({behavior:"smooth",block:"start"});});
+$("printConsolidatedButton").addEventListener("click",()=>window.print());
+$("downloadWordButton").addEventListener("click",()=>{try{downloadConsolidatedWord();showFeedback("Se inició la descarga del reporte en Word.");}catch(err){console.error("Error al exportar Word",err);showFeedback("No se pudo generar el archivo Word: "+(err?.message||"error desconocido"));}});
+$("clearButton").addEventListener("click",()=>{
+ if(!confirm("¿Desea limpiar todos los campos del formulario? Si continúa, se eliminarán los datos guardados en este navegador."))return;
+ localStorage.removeItem(STORAGE_KEY);
+ $("nombreOrganizacion").value="";$("nombre").value="";$("cargo").value="";$("periodo").value="2026-10";$("fechaPresentacion").value="";$("revisor").value="";$("fechaRevision").value="";$("proyeccionMesSiguiente").value="";
+ applyData({});showFeedback("Formulario limpio.");
+});
+fillMonths();
+let restored=false;
+try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){applyData(JSON.parse(saved));restored=true;}}catch(e){console.warn("No fue posible restaurar los datos guardados.",e);}
+if(!restored){renderObligations();}
+$("nombreFirma").value=$("nombre").value;
+if(restored)showFeedback("Se recuperaron los datos guardados anteriormente en este navegador.");
+</script>
+</body>
+</html>
